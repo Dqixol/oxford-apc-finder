@@ -3,6 +3,94 @@
 What the site said, and when it changed. Generated automatically by
 `pipeline/changelog.py` on every refresh — newest entry first.
 
+## 2026-08-24
+
+- **212** journals added, **17** removed, **2800** changed.
+
+### Deal status changes (7)
+
+- Intelligent Oncology (2950-2616): `none` → `discount`
+- Journal of Dermatologic Science and Cosmetic Technology (2950-306X): `none` → `discount`
+- Biomedical Analysis (2950-435X): `none` → `discount`
+- Global and earth surface processes change. (2950-4740): `none` → `discount`
+- Sustainable Geosciences People Planet and Prosperity (2950-4929): `none` → `discount`
+- npj Health Systems (3005-1959): `none` → `discount`
+- npj Wireless Technology (3059-4391): `none` → `discount`
+
+### Price changes (826)
+
+- American Mineralogist (0003-004X): — → 100 USD
+- Archiv für Geschichte der Philosophie (0003-9101): — → 0 EUR
+- Archivum Immunologiae et Therapiae Experimentalis (0004-069X): 3860 → 3990
+- Asiatische Studien – Études Asiatiques (0004-4717): — → 0 EUR
+- The Astronomical Journal (0004-6256): 4681 → 2356 GBP
+- The Astrophysical Journal (0004-637X): 4681 → 2356 GBP
+- Australian & New Zealand Journal of Criminology (0004-8658): — → 3650 USD
+- Beiträge zur Geschichte der deutschen Sprache und Literatur (PBB) (0005-8076): — → 2400 EUR
+- Bibliotheksdienst (0006-1972): — → 0 EUR
+- Blood (0006-4971): 5000 → 5500
+- Botanica Marina (0006-8055): — → 2400 EUR
+- Chromosoma (0009-5915): 3590 → 3890
+- Deutsche Zeitschrift für Philosophie (0012-1045): — → 2400 EUR
+- Drugs (0012-6667): 5290 → 5990
+- Economic Botany (0013-0001): 3590 → 3990
+- Biomedizinische Technik/Biomedical Engineering (0013-5585): — → 0 EUR
+- Erwerbs-Obstbau (0014-0309): 3090 → 3290
+- Forschung im Ingenieurwesen (0015-7899): 2990 → 2290
+- Netherlands Journal of Geosciences – Geologie en Mijnbouw (0016-7746): 1870 → 1725 USD
+- Holzforschung (0018-3830): — → 0 EUR
+- Computer (0018-9162): — → 2995 USD
+- IEEE Journal of Quantum Electronics (0018-9197): — → 2645 USD
+- IEEE Journal of Solid-State Circuits (0018-9200): — → 2645 USD
+- Proceedings of the IEEE (0018-9219): — → 2645 USD
+- IEEE Transactions on Aerospace and Electronic Systems (0018-9251): — → 2645 USD
+- IEEE Transactions on Antennas and Propagation (0018-926X): — → 2645 USD
+- IEEE Transactions on Automatic Control (0018-9286): — → 2645 USD
+- IEEE Transactions on Biomedical Engineering (0018-9294): — → 2645 USD
+- IEEE Transactions on Broadcasting (0018-9316): — → 2645 USD
+- IEEE Transactions on Computers (0018-9340): — → 2645 USD
+- IEEE Transactions on Education (0018-9359): — → 2645 USD
+- IEEE Transactions on Electromagnetic Compatibility (0018-9375): — → 2645 USD
+- IEEE Transactions on Electron Devices (0018-9383): — → 2645 USD
+- IEEE Transactions on Engineering Management (0018-9391): — → 2645 USD
+- IEEE Transactions on Information Theory (0018-9448): — → 2645 USD
+- IEEE Transactions on Instrumentation and Measurement (0018-9456): — → 2645 USD
+- IEEE Transactions on Magnetics (0018-9464): — → 2645 USD
+- IEEE Transactions on Microwave Theory and Techniques (0018-9480): — → 2645 USD
+- IEEE Transactions on Nuclear Science (0018-9499): — → 2645 USD
+- IEEE Transactions on Reliability (0018-9529): — → 2645 USD
+- IEEE Transactions on Vehicular Technology (0018-9545): — → 2645 USD
+- Iberoromania (0019-0993): — → 2400 EUR
+- International Journal of Health Services (0020-7314): — → 4400 USD
+- Jahrbücher für Nationalökonomie und Statistik (0021-4027): — → 0 EUR
+- The Journal of Commonwealth Literature (0021-9894): — → 3650 USD
+- Journal of Nematology (0022-300X): 600 → 1000
+- Journal of Southeast Asian Studies (0022-4634): — → 3550 USD
+- Law & Society Review (0023-9216): 2580 → 3550
+- The Library (0024-2160): — → 2869 GBP
+- Mammalia (0025-1461): — → 2400 EUR
+- …and 776 more.
+
+### Removed (17)
+
+- Jurnal Filsafat (0853-1870)
+- Jurnal Manajemen Indonesia (1411-7835)
+- JEMA Jurnal Ilmiah Bidang Akuntansi dan Manajemen (1693-7864)
+- Sosial Budaya (1979-2603)
+- JURNAL AGROEKOTEKNOLOGI (2085-7985)
+- Jurnal Ekonomi Bisnis dan Kewirausahaan (2087-9954)
+- Revista Senderos Pedagógicos (2145-8243)
+- St Petersburg Polytechnical University Journal Physics and Mathematics (2304-9782)
+- Kartika Jurnal Ilmiah Farmasi (2354-6565)
+- Jurnal Ilmu Kelautan SPERMONDE (2460-0156)
+- Jurnal Masharif al-Syariah Jurnal Ekonomi dan Perbankan Syariah (2527-6344)
+- Untirta Civic Education Journal (2541-6693)
+- Jurnal Bidang Pendidikan Dasar (2549-0117)
+- International Journal Pedagogy of Social Studies (2549-6530)
+- upajiwa dewantara (2580-4553)
+- THE JOURNAL OF MUHAMMADIYAH MEDICAL LABORATORY TECHNOLOGIST (2597-3681)
+- Journal of Applied Studies in Language (2598-4101)
+
 ## 2026-08-17
 
 - **119** journals added, **2** removed, **151** changed.
