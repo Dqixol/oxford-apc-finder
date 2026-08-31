@@ -286,7 +286,7 @@ If acknowledging UKRI research funding contact
 pnaswaiverrequests@nas.edu
 to request a fee waiver.
 If acknowledging other funding e.g. Wellcome, or unfunded, use our Open Access Policy for funder/REEF compliance and deposit into ORA. Please contact
-openaccess@bodeian.ox.ac.uk
+openaccess@bodleian.ox.ac.uk
 for any queries.
 Institute of Electrical and Electronics Engineers (IEEE)
 Oxford has signed a ‘read and green’ deal with the Institute of Electrical and Electronics Engineers. This enables Oxford corresponding and co-authors to self-archive their Author Accepted Manuscripts, that were submitted to any subscription IEEE journals or conference proceedings, with no embargo.

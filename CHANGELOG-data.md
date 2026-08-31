@@ -3,6 +3,71 @@
 What the site said, and when it changed. Generated automatically by
 `pipeline/changelog.py` on every refresh — newest entry first.
 
+## 2026-08-31
+
+- **31** journals added, **4** removed, **103** changed.
+
+### Price changes (90)
+
+- Turkish Journal of Biochemistry (0250-4685): 600 → 1000
+- Journal of Intelligent Systems (0334-1860): 1200 → 1500
+- High Temperature Materials and Processes (0334-6455): 1000 → 1050
+- Journal of the Mechanical Behavior of Materials (0334-8938): 500 → 750
+- Journal of Laboratory Medicine (0342-3026): 2000 → 1000
+- Srpski arhiv za celokupno lekarstvo (0370-8179): — → 75 EUR
+- Demonstratio Mathematica (0420-1213): 1000 → 1050
+- Science and Engineering of Composite Materials (0792-1233): 1000 → 1050
+- Main Group Metal Chemistry (0792-1241): 1000 → 1050
+- Reviews in Analytical Chemistry (0793-0135): 1000 → 1050
+- Heterocyclic Communications (0793-0283): 1500 → 1600
+- Oceanography (1042-8275): 500 → 2880
+- ONCOLOGIE (1292-3818): 850 → 1275
+- Applied Rheology (1430-6395): 1000 → 1050
+- Zeitschrift für Kristallographie - New Crystal Structures (1433-7266): 600 → 750
+- Nuclear Technology and Radiation Protection (1451-3994): 150 → 300
+- Advanced Nonlinear Studies (1536-1365): 1200 → 1300
+- REVIEWS ON ADVANCED MATERIALS SCIENCE (1605-8127): 1200 → 1300
+- e-Polymers (1618-7229): 1500 → 1600
+- Open Mathematics (1644-3616): 1000 → 1050
+- Journal of Mathematical Cryptology (1862-2976): 1000 → 1050
+- Economics (1864-6042): 1000 → 1050
+- BioMolecular Concepts (1868-5021): 1500 → 1600
+- Leibniz international proceedings in informatics (1868-8969): 60 → 80
+- Open Life Sciences (1895-104X): 2000 → 2100
+- Open Medicine (1895-1058): 2000 → 2100
+- Open Geosciences (1896-1517): 1200 → 1300
+- Bulletin of the South Ural State University series Power Engineering (1990-8512): 6578 → 10000
+- Journal of Rehabilitation Medicine – Clinical Communications (2003-0711): 920 → 850
+- The New Research of Tuva (2079-8482): 60000 → 650 EUR
+- Paladyn Journal of Behavioral Robotics (2080-9778): 1000 → 1050
+- Translational Neuroscience (2081-3856): 1500 → 1600
+- Journal of Geodetic Science (2081-9919): 500 → 750
+- Open Engineering (2081-9927): 1000 → 1050
+- Noise Mapping (2084-879X): 1000 → 1050
+- OASIcs : OpenAccess Series in Informatics (2190-6807): 60 → 80
+- Nanotechnology Reviews (2191-9089): 1500 → 2000
+- Advances in Nonlinear Analysis (2191-9496): 1200 → 1300
+- Green Processing and Synthesis (2191-9542): 1500 → 1600
+- Nonlinear Engineering (2192-8010): 1000 → 1050
+- Journal of Causal Inference (2193-3677): 1000 → 1050
+- Australian Journal of Applied Linguistics (2209-0959): 440 → 990
+- Intercultural Communication Education (2209-1041): 440 → 990
+- Open Computer Science (2299-1093): 1000 → 1050
+- Analysis and Geometry in Metric Spaces (2299-3274): 1000 → 1050
+- Concrete Operators (2299-3282): 500 → 750
+- Dependence Modeling (2300-2298): 1000 → 1050
+- Open Archaeology (2300-6560): 500 → 750
+- Complex Manifolds (2300-7443): 500 → 750
+- Special Matrices (2300-7451): 1000 → 1050
+- …and 40 more.
+
+### Removed (4)
+
+- Cumhuriyet Dental Journal (1302-5805)
+- Al-Idaroh Jurnal Studi Manajemen Pendidikan Islam (2549-8339)
+- Revista Brasileira de Meio Ambiente (2595-4431)
+- Meio Ambiente (Brasil) (2675-3065)
+
 ## 2026-08-24
 
 - **212** journals added, **17** removed, **2800** changed.
