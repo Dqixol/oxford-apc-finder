@@ -3,6 +3,44 @@
 What the site said, and when it changed. Generated automatically by
 `pipeline/changelog.py` on every refresh — newest entry first.
 
+## 2026-09-07
+
+- **27** journals added, **9** removed, **22** changed.
+
+### Deal status changes (2)
+
+- Environmental Functional Materials (2773-0581): `none` → `discount`
+- Metals Advances (3117-7220): `none` → `discount`
+
+### Price changes (14)
+
+- International Journal of Special Education (IJSE) (0827-3383): 250 → —
+- Pensar Enfermagem - Revista Científica | Journal of Nursing (0873-8904): — → 150 EUR
+- Revista Chapingo Serie Horticultura (1027-152X): 200 → —
+- Proceedings of the Shevchenko Scientific Society Medical Sciences (1563-3950): — → 420 EUR
+- Мінеральні ресурси України (1682-721X): — → 200 EUR
+- Horizonte Médico (Lima) (1727-558X): — → 145 USD
+- eLife (2050-084X): 3000 → 3750
+- Pitannâ lìteraturoznavstva (2306-2908): 600 → —
+- Collabra (2376-6832): 975 → 875
+- Ornamental Horticulture (2447-536X): 200 → 400
+- Islamic Economics Journal (2460-1896): — → 750000 IDR
+- Akofena revue scientifique des Sciences du Langage Lettres Langues & de la Communication (2706-6312): 95 → 71000 XOF
+- African Journal of Literature and Humanities (2706-7394): 100 → 114
+- Health Dynamics (3006-5518): 55 → 150
+
+### Removed (9)
+
+- Finisterra (0430-5027)
+- Jurnal Ilmiah Teknik Sipil (1411-1292)
+- Cadernos de Letras da UFF (1413-053X)
+- THE PROBLEMS OF ECONOMY (2222-0712)
+- Ekonomìka ta upravlìnnâ APK (2310-9262)
+- E-Journal of Cultural Studies (2338-2449)
+- Indonesian EFL Journal Journal of ELT Linguistics and Literature (2460-0938)
+- Journal of Electrical Electronics and Informatics (2549-8304)
+- Економіка управління та адміністрування (2664-245X)
+
 ## 2026-08-31
 
 - **31** journals added, **4** removed, **103** changed.
