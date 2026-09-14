@@ -3,6 +3,71 @@
 What the site said, and when it changed. Generated automatically by
 `pipeline/changelog.py` on every refresh — newest entry first.
 
+## 2026-09-14
+
+- **37** journals added, **10** removed, **1925** changed.
+
+### Price changes (45)
+
+- Austral journal of veterinary sciences (0719-8000): 850 → 850000 CLP
+- Journal of the ASEAN Federation of Endocrine Societies (0857-1074): — → 300 USD
+- Biological and Pharmaceutical Bulletin (0918-6158): — → 90000 JPY
+- Nature Environment and Pollution Technology (0972-6268): 675 → 600
+- Journal of Water and Wastewater; Ab va Fazilab ( in persian ) (1024-5936): 8500000 → 12000000
+- مجله علمی شیلات ایران (1026-1354): 2500000 → 3250000
+- BIORISK – Biodiversity and Ecosystem Risk Assessment (1313-2644): — → 500 EUR
+- BULETIN FISIKA (1411-4690): 250000 → 350021
+- مجله ایرانی آموزش در علوم پزشکی (1608-9359): — → 5000000 IRR
+- Motricidade (1646-107X): 150 → 300
+- Pielegniarstwo XXI wieku / Nursing in the 21st Century (1730-1912): — → 110 EUR
+- Ukrainian Neurosurgical Journal (1810-3154): — → 200 USD
+- Digest Journal of Nanomaterials and Biostructures (1842-3582): 300 → 1200 USD
+- Al-Adyan Jurnal Studi Lintas Agama (1907-1736): — → 1000000 IDR
+- International journal of fertility and sterility. (2008-0778): 800 → 39000000 IRR
+- Masculinities & Social Change (2014-3605): 400 → 600
+- ANALITIKA (2085-6601): — → 350000 IDR
+- International Journal of Contemporary Educational Research (2148-3868): — → 800 EUR
+- International Journal of Agricultural Management and Development (2159-5852): — → 300 GBP
+- JURNAL ADMINISTRASI BISNIS (2252-3294): 400000 → 700000
+- Primatika Jurnal Pendidikan Matematika (2302-4518): 300000 → 600000
+- International Journal of Foreign Language Teaching and Research (2322-3898): 3500000 → 15000000
+- پیکره (2322-4622): 5000000 → —
+- SIMBIOSIS Journal of Biological Sciences (2337-7224): 500000 → 350001
+- Jurnal Rekayasa Mesin (2338-1663): 250000 → 1500000
+- Control  and Optimization in Applied Mathematics (2383-3130): 700000 → —
+- Al Ibtida Jurnal Pendidikan Guru MI (2442-5133): 1000000 → 200 USD
+- JINoP (Jurnal Inovasi Pembelajaran) (2443-1591): — → 1000000 IDR
+- Journal of Sport Biomechanics (2476-4906): — → 30000000 IRR
+- Physical rehabilitation and recreational health technologies (2522-1906): 100 → 200
+- Molecular and Cellular Biomedical Sciences (2527-3442): — → 35 USD
+- AKSIOLOGIYA Jurnal Pengabdian Kepada Masyarakat (2528-4967): — → 500000 IDR
+- Amwaluna Jurnal Ekonomi dan Keuangan Syariah (2540-8399): 1500000 → 2000000
+- Journal of Public Administration Studies (2541-6979): 650000 → 60 USD
+- Jurnal Pemberdayaan Masyarakat Madani (JPMM) (2580-4332): — → 500000 IDR
+- JFMR-Journal of Fisheries and Marine Research (2581-0294): — → 600000 IDR
+- International Transactions on Electrical Engineering and Computer Science (2583-6471): 50 → —
+- Journal of Social Sciences (2587-3490): — → 200 EUR
+- Journal of Qualitative Research in Health Sciences (2645-6109): — → 350 EUR
+- Journal of Agriculture Food and Environment (2708-5694): 40 → 100
+- Progress in Physics of Applied Materials (2783-4794): — → 20000000 IRR
+- RSC Mechanochemistry (2976-8683): — → 2200 GBP
+- RSC Pharmaceutics (2976-8713): — → 2200 GBP
+- International Journal of Biophotonics and Biomedical Engineering (2980-9037): — → 300 GBP
+- Discover Public Health (3005-0774): — → 1522 GBP
+
+### Removed (10)
+
+- Nepal Journal of Obstetrics and Gynaecology (1999-8546)
+- ELTIN JOURNAL Journal of English Language Teaching in Indonesia (2339-1561)
+- Jurnal Studia Insania (2355-1011)
+- Jurnal CARE (Children Advisory Research and Education) (2355-2034)
+- Research Journal of Life Science (2355-9926)
+- International Journal of Advances in Signal and Image Sciences (2457-0370)
+- مجــلة کلیة اللغة العربیة بأســیوط (2536-9083)
+- Akuntansi Dewantara (2549-9637)
+- International Journal of Applied Sciences in Tourism and Events (2580-5584)
+- Nepalese Medical Journal (2631-2093)
+
 ## 2026-09-07
 
 - **27** journals added, **9** removed, **22** changed.
