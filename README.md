@@ -2,7 +2,7 @@
 
 **[ben18785.github.io/oxford-apc-finder](https://ben18785.github.io/oxford-apc-finder/)**
 
-I created this tool because I have often found it hard to understand whether a given journal was covered by Oxford's various deals with publishers etc.
+I created this tool because I have often found it hard to understand whether publishing open access in a given journal was covered by Oxford's various deals with publishers etc.
 
 Usually the information I want is ``how much would I have to pay if my article was accepted in this journal if I am the corresponding author?'', and that is what the tool aims to answer.
 
