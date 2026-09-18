@@ -8,7 +8,7 @@ from ollama import ChatResponse
 # Maximum paragraph size
 # The paragraph will be send, once we pass this threshold, so dont set it to its absolute limits
 # 
-MAX_LENGTH = 4000
+MAX_LENGTH = 8000
 
 # 
 # Check if input file is given
@@ -22,18 +22,26 @@ if(len(sys.argv) != 2):
 # 
 def sendSectionToLLM(buffer):
   stream =  chat(
-    model='qwen3:4b',
     # model='gemma3:4b',
+    model='qwen3:4b',
     messages=[
       {
         'role': 'system',
-        'content': "You get a section of a submission guideline from a scientific publisher and you want to publish a manuscript. Tell me what the maximal length of the abstract may be. Also tell me igf there is a total word limit. Give the answer as json, like {abstract: ... , total: ...}. If no information is given or if there is no limit, give -1 as answer. Do not worry you get all the information. In later runs you get other sections to read."
+        'content': "You get a section of a submission guideline from a scientific publisher and I want a summary of the publication requirements. Tell me what the maximal length of the abstract may be. Also tell me if there is a total word limit. Give the answer as json, like {\"abstract\": 123, \"total\": 123}. If no information is given in the text or if there are no limits, set -1 as the value. Do not add any additional formatting, like markdown blocks. Think step by step, but limit yourself to 2–3 iterations max. No loops, give final answer quickly."
       },
       {
         'role': 'user',
         'content': buffer
       }
     ],
+    options={ 
+        "temperature": 0.3, # These settings are to prevent thinking loops
+        "top_p": 0.8,
+        "top_k": 20,
+        "presence_penalty": 0.8,
+        "repetition_penalty": 1.05,
+        "max_tokens": 6000
+    },
     stream=True,
   )
 
@@ -60,7 +68,7 @@ def sendSectionToLLM(buffer):
 
 def parseSection(result, section):
   try:
-    obj = json.loads(section)
+    obj = json.loads(section.strip())
 
     abstractLength = obj["abstract"]
     totalLength = obj["total"]
