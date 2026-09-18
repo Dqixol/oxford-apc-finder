@@ -1,0 +1,86 @@
+[
+  {
+    "journal": "Nature",
+    "slug": "nature",
+    "skipped": true,
+    "note": "Not blocked -- already scraped directly (see journal_scrapers/1476-4687_nature). Skipped here; Nature's cookie-auth redirect dance also makes Wayback's auto-resolve loop indefinitely, so it is not a useful Wayback test case anyway."
+  },
+  {
+    "journal": "Science",
+    "slug": "science",
+    "pages": [
+      {
+        "name": "authors",
+        "type": "html",
+        "status": 200,
+        "finalUrl": "https://web.archive.org/web/20230314001342/https://www.science.org/content/page/science-information-authors",
+        "ok": true,
+        "title": "Information for authors",
+        "markdownLength": 28280
+      }
+    ]
+  },
+  {
+    "journal": "PNAS",
+    "slug": "pnas",
+    "pages": [
+      {
+        "name": "submitting",
+        "type": "html",
+        "status": 200,
+        "finalUrl": "https://web.archive.org/web/20260617040225/https://www.pnas.org/author-center/submitting-your-manuscript",
+        "ok": true,
+        "title": "How to Submit a Manuscript – PNAS Submission Guidelines",
+        "markdownLength": 35224
+      }
+    ]
+  },
+  {
+    "journal": "The Lancet",
+    "slug": "lancet",
+    "note": "Only good capture is from 2016 (a decade stale) -- everything since is redirect-chain only. Landing page is just a nav index; real detail is in the linked PDF.",
+    "pages": [
+      {
+        "name": "information-for-authors",
+        "type": "html",
+        "status": 200,
+        "finalUrl": "https://web.archive.org/web/20160508192343/http://www.thelancet.com/lancet/information-for-authors",
+        "ok": true,
+        "title": "The Lancet: Information for Authors",
+        "markdownLength": 4765
+      },
+      {
+        "name": "information-for-authors",
+        "type": "pdf",
+        "status": 200,
+        "ok": true,
+        "bytes": 227419
+      }
+    ]
+  },
+  {
+    "journal": "NEJM",
+    "slug": "nejm",
+    "note": "article-types page has good captures only through 2019 -- from mid-2020 on, NEJM's WAF blocked the Internet Archive's own crawler too (archived captures ARE archived block pages). Pinned to a confirmed-good 2019 snapshot.",
+    "pages": [
+      {
+        "name": "home",
+        "type": "html",
+        "status": 200,
+        "finalUrl": "https://web.archive.org/web/20240105050229/https://www.nejm.org/author-center/home",
+        "ok": true,
+        "title": "NEJM Author Center",
+        "markdownLength": 4411
+      },
+      {
+        "name": "article-types",
+        "type": "html",
+        "status": 200,
+        "finalUrl": "https://web.archive.org/web/20191121095539/https://www.nejm.org/author-center/article-types",
+        "ok": true,
+        "title": "Article Types | NEJM Author Center",
+        "markdownLength": 8507
+      }
+    ]
+  }
+]
