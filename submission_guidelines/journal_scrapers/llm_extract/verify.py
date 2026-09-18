@@ -49,8 +49,6 @@ def extract_claims(record: dict) -> list[dict]:
             count_range(f"{prefix}.figure_limits[{j}]", f"{at.get('type')} {fl.get('counts', 'figures')}", fl)
         count_range(f"{prefix}.reference_limit", f"{at.get('type')} references", at.get("reference_limit"))
         count_range(f"{prefix}.author_limit", f"{at.get('type')} authors", at.get("author_limit"))
-        if at.get("submission_mode"):
-            add(f"{prefix}.submission_mode", f"{at.get('type')} submission mode: {at['submission_mode']}")
 
     prm = record.get("peer_review_model")
     if prm and prm.get("value"):

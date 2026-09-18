@@ -176,7 +176,7 @@ def build() -> JournalRecord:
         ),
         needs_review=[
             "peer_review_model", "preprint_policy", "ai_use_policy", "latex_accepted",
-            "template_provided", "robots_txt_allowed", "orcid_required", "languages_accepted",
+            "template_provided", "robots_txt_allowed", "languages_accepted",
         ],
         source="scraped",
     )

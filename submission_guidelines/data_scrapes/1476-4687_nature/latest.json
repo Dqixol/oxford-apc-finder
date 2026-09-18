@@ -41,7 +41,6 @@
     "notes": "No general manuscript template. Nature provides a subject-specific ChemDraw template for chemical structures (http://www.nature.com/documents/nr-chemdraw-stylesheet.cds) and an annotated example of the summary paragraph (https://www.nature.com/documents/nature-summary-paragraph.pdf), but neither is a full manuscript template."
   },
   "template_url": null,
-  "orcid_required": null,
   "languages_accepted": [
     "English"
   ],
@@ -50,7 +49,6 @@
       "type": "Article",
       "source_url": "https://www.nature.com/nature/for-authors/formatting-guide",
       "description": "Articles are original reports whose conclusions represent a substantial advance in understanding of an important problem and have immediate, far-reaching implications.",
-      "submission_mode": null,
       "total_word_limit": {
         "min": 2500,
         "max": 4300,
@@ -122,7 +120,6 @@
       "type": "Correspondence",
       "source_url": "https://www.nature.com/nature/for-authors/other-subs",
       "description": "Brief comments on topical Nature content (Editorials, World View, News, News Features, Books & Arts reviews, Comment pieces or Correspondence) -- not technical comments on peer-reviewed research papers (those go to Matters Arising instead).",
-      "submission_mode": null,
       "total_word_limit": {
         "min": null,
         "max": 200,
@@ -151,7 +148,6 @@
       "type": "Matters Arising",
       "source_url": "https://www.nature.com/nature/for-authors/matters-arising",
       "description": "Post-publication technical comments on a Nature research paper published within the past 18 months, plus the author's Reply.",
-      "submission_mode": null,
       "total_word_limit": {
         "min": null,
         "max": 1200,
@@ -191,7 +187,6 @@
       "type": "Review",
       "source_url": "https://www.nature.com/nature/for-authors/other-subs",
       "description": "Focuses on one topical aspect of a field; should not focus on the author's own work.",
-      "submission_mode": "invited",
       "total_word_limit": {
         "min": null,
         "max": null,
@@ -214,7 +209,6 @@
       "type": "Perspective",
       "source_url": "https://www.nature.com/nature/for-authors/other-subs",
       "description": "Follows the same formatting guidelines as Reviews; more forward-looking/speculative and may be opinionated but balanced.",
-      "submission_mode": "invited",
       "total_word_limit": {
         "min": null,
         "max": null,
@@ -237,7 +231,6 @@
       "type": "Analysis",
       "source_url": "https://www.nature.com/nature/for-authors/other-subs",
       "description": "Peer-reviewed; presents a new analysis of existing data rather than original data. Published only occasionally.",
-      "submission_mode": "presubmission-required",
       "total_word_limit": {
         "min": null,
         "max": null,
@@ -258,7 +251,6 @@
       "type": "Registered Reports",
       "source_url": "https://www.nature.com/nature/for-authors/registered-reports",
       "description": "Two-stage process: Stage 1 protocol (introduction, hypotheses, methods, analysis plan) is peer reviewed and can earn in-principle acceptance before data collection; Stage 2 is the full manuscript with results and discussion added.",
-      "submission_mode": null,
       "total_word_limit": null,
       "required_sections": [
         "Stage 1: Registered Report Protocol",
@@ -275,7 +267,6 @@
   ],
   "remarks": "Scope limited to research-submission types (excludes staff-written content: News, Careers, Obituaries, Books & Arts, Futures, News & Views, Technology Features, Outlooks, Comment and World View). Peer review model, preprint policy, and AI-use policy sourced from https://www.nature.com/nature-research/editorial-policies/peer-review, https://www.nature.com/nature-portfolio/editorial-policies/preprints-conference-proceedings, and https://www.nature.com/nature-portfolio/editorial-policies/ai respectively.",
   "needs_review": [
-    "orcid_required",
     "article_types[Registered Reports].total_word_limit",
     "article_types[Registered Reports].figure_limits",
     "article_types[Registered Reports].reference_limit"

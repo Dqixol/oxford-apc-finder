@@ -98,14 +98,12 @@ FEW_SHOT_OUTPUT = {
         "notes": "The 'aomart' LaTeX class file, available from CTAN -- optional, not mandatory.",
     },
     "template_url": None,  # the model shouldn't invent the CTAN URL -- that took a live web check to verify, not something in the given text
-    "orcid_required": None,
     "languages_accepted": ["English", "French", "German"],
     "article_types": [
         {
             "type": "Article",
             "source_url": "https://annals.math.princeton.edu/submission-guidelines",
             "description": "Original mathematics research papers -- the page documents only one general submission format.",
-            "submission_mode": None,
             "total_word_limit": {
                 "min": None, "max": None, "unit": "words", "excludes": [],
                 "notes": "No word/page limit stated anywhere in the text -- confirmed absence, not something unchecked.",
@@ -121,7 +119,7 @@ FEW_SHOT_OUTPUT = {
         }
     ],
     "remarks": "No article processing charges (out of scope for this schema, noted here since it was explicitly stated in the text). Non-English submissions require an English abstract in addition to the original-language one.",
-    "needs_review": ["peer_review_model", "preprint_policy", "robots_txt_allowed", "orcid_required"],
+    "needs_review": ["peer_review_model", "preprint_policy", "robots_txt_allowed"],
     "source": "scraped",
 }
 
@@ -147,13 +145,15 @@ field's name (as a dotted path, e.g. "article_types[0].total_word_limit") to the
 null. When a source gives a real range ("12-20 references", "2,500-4,300 words"), set both min \
 and max to the two different numbers.
 
-4. `peer_review_model.value`, when set, must be a JSON list whose entries are ONLY drawn from: \
+4. Qualitative/non-numeric limits: if a limit is real but never reduces to an actual number \
+(e.g. "1-2 small figures or tables", "a modest number of references"), do NOT invent a min/max \
+to fill the field -- leave min/max null and put the qualitative description in `notes` \
+verbatim instead.
+
+5. `peer_review_model.value`, when set, must be a JSON list whose entries are ONLY drawn from: \
 single-anonymized, double-anonymized, open, transparent, none, other. If a journal offers more \
 than one (e.g. single by default, double optional), list all that apply and explain which is \
 the default / under what condition in `notes` -- do not write a sentence into `value` itself.
-
-5. `submission_mode`, when set, must be exactly one of: open, invited, presubmission-required, \
-pitch-required, other.
 
 6. `description` (on each article type) is what that type IS/is FOR -- its purpose or scope. \
 `notes` is caveats about the numeric rules (e.g. "guidelines, not hard caps"). Don't mix them.
@@ -169,6 +169,10 @@ careers pages, "solely commissioned by our editors" with no author-submission pa
 9. Do not invent URLs. `source_url` should be the URL you were told this text came from, or \
 null if you don't know it. Do not guess a template/resource URL that isn't given to you \
 verbatim in the text.
+
+10. For any free-text field (policy summaries, `notes`, `description`), write a concise \
+factual summary in your own words -- do not reproduce large verbatim blocks of the source \
+page.
 
 Output must be valid JSON matching the provided schema exactly -- no markdown fences, no \
 commentary outside the JSON object.

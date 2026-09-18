@@ -160,7 +160,7 @@ class NatureScraper(BaseJournalScraper):
         self.save_raw_html("ai-policy", ai_html)
         ai_soup = BeautifulSoup(ai_html, "html.parser")
 
-        needs_review: list[str] = ["orcid_required"]  # only found type-specific "if applicable" phrasing (Correspondence), not a journal-wide statement
+        needs_review: list[str] = []
 
         article_type = self._parse_article(formatting_soup, needs_review)
         correspondence_type = self._parse_correspondence(other_subs_soup, needs_review)
@@ -203,7 +203,6 @@ class NatureScraper(BaseJournalScraper):
             latex_accepted=latex_accepted,
             template_provided=template_provided,
             template_url=None,
-            orcid_required=None,  # only found type-specific "if applicable" phrasing (Correspondence), not a journal-wide requirement -- see needs_review
             languages_accepted=["English"],  # explicit: "Contributions should be double-spaced and written in English"
             article_types=[
                 article_type,
@@ -457,7 +456,6 @@ class NatureScraper(BaseJournalScraper):
             type="Review",
             source_url=OTHER_SUBS_URL,
             description="Focuses on one topical aspect of a field; should not focus on the author's own work.",
-            submission_mode="invited",
             total_word_limit=WordLimit(notes=word_limit_notes),
             required_sections=["Synopsis (basic structure, material to be covered, proposed depth/arrangement)"],
             figure_limits=[],
@@ -470,7 +468,6 @@ class NatureScraper(BaseJournalScraper):
                 "Follows the same formatting guidelines as Reviews; more forward-looking/speculative and may be "
                 "opinionated but balanced."
             ),
-            submission_mode="invited",
             total_word_limit=WordLimit(notes=word_limit_notes),
             required_sections=["Synopsis (basic structure, material to be covered, proposed depth/arrangement)"],
             figure_limits=[],
@@ -485,7 +482,6 @@ class NatureScraper(BaseJournalScraper):
             type="Analysis",
             source_url=OTHER_SUBS_URL,
             description="Peer-reviewed; presents a new analysis of existing data rather than original data. Published only occasionally.",
-            submission_mode="presubmission-required",
             total_word_limit=WordLimit(notes="No fixed word limit published."),
             required_sections=[],
             figure_limits=[],

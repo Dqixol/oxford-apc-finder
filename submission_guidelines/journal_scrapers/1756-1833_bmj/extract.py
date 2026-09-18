@@ -103,11 +103,10 @@ def build() -> JournalRecord:
             type="Editorials",
             source_url=SOURCE_URL,
             description="Scholarly, balanced, evidence-based responses to something topical; usually 1-3 authors, max 4 (5 if the extra author is a patient).",
-            submission_mode="invited",
             total_word_limit=_wl(800, ceiling=True, notes="'Up to 800 words' -- explicit ceiling."),
             reference_limit=CountRange(min=12, max=20),
             author_limit=CountRange(max=4, notes="5 allowed only if the extra author is a patient."),
-            notes="Authors must be free of relevant financial ties to industry (since 2014 policy).",
+            notes="Invited only. Authors must be free of relevant financial ties to industry (since 2014 policy).",
         ),
         ArticleType(
             type="Personal Views",
@@ -186,7 +185,7 @@ def build() -> JournalRecord:
             notes="Word limit cell was blank in the source table -- genuinely not checked, not a confirmed absence.",
         ),
     ]
-    needs_review = ["article_types[State of the Art Reviews].total_word_limit", "peer_review_model", "preprint_policy", "ai_use_policy", "latex_accepted", "template_provided", "orcid_required", "languages_accepted"]
+    needs_review = ["article_types[State of the Art Reviews].total_word_limit", "peer_review_model", "preprint_policy", "ai_use_policy", "latex_accepted", "template_provided", "languages_accepted"]
 
     return JournalRecord(
         journal="The BMJ",

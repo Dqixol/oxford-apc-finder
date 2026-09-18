@@ -16,14 +16,18 @@ as None and explain which case it is in `notes`.
 
 Structure vs. free text: only fields we actually want to compare/filter/
 aggregate across journals are structured (word/figure/reference/author
-counts, peer-review category, LaTeX/template/ORCID booleans). Everything
-else -- figure DPI, file size limits, LaTeX class/margin specifics, and any
-nuance that doesn't reduce to a clean category or number -- stays in a
-`notes` field rather than getting its own dedicated field. Trying to model
-every possible constraint type doesn't scale past a handful of journals;
-free text is the honest answer for the long tail. Every structured field
-that can fail to reduce cleanly carries a `notes` companion for exactly that
-reason (see WordLimit, FigureLimit, CountRange, SourcedValue below).
+counts, peer-review category, LaTeX/template booleans). Everything else --
+figure DPI, file size limits, LaTeX class/margin specifics, and any nuance
+that doesn't reduce to a clean category or number -- stays in a `notes`
+field rather than getting its own dedicated field. Trying to model every
+possible constraint type doesn't scale past a handful of journals; free text
+is the honest answer for the long tail. Every structured field that can fail
+to reduce cleanly carries a `notes` companion for exactly that reason (see
+WordLimit, FigureLimit, CountRange, SourcedValue below). A qualitative limit
+that never reduces to a real number (e.g. "1-2 small figures or tables") is
+not a min/max to guess at -- leave min/max None and put the whole qualitative
+description in `notes` verbatim; don't force a fake number into min/max just
+to fill the field.
 
 Provenance: a journal's author-guidance is usually spread across several
 pages (formatting guide, editorial-policy pages, robots.txt...), so a single
@@ -48,7 +52,6 @@ from typing import Any, Optional
 # string in `value` (see schema.py history: peer_review_model.value used to
 # hold a full sentence for Nature, defeating the point of the field).
 PEER_REVIEW_MODELS = ("single-anonymized", "double-anonymized", "open", "transparent", "none", "other")
-SUBMISSION_MODES = ("open", "invited", "presubmission-required", "pitch-required", "other")
 
 
 @dataclass
@@ -102,7 +105,6 @@ class ArticleType:
     type: str
     source_url: Optional[str] = None
     description: Optional[str] = None  # what this article type is/for, e.g. "post-publication technical comments on a paper published within 18 months" -- not every journal states this, leave None rather than guess
-    submission_mode: Optional[str] = None  # see SUBMISSION_MODES; None if not stated/checked
     total_word_limit: Optional[WordLimit] = None
     required_sections: list[str] = field(default_factory=list)
     section_word_limits: list[SectionWordLimit] = field(default_factory=list)
@@ -128,7 +130,6 @@ class JournalRecord:
     latex_accepted: Optional[SourcedValue] = None
     template_provided: Optional[SourcedValue] = None
     template_url: Optional[str] = None  # the actual template file/resource, when one exists -- not a citation
-    orcid_required: Optional[SourcedValue] = None
     languages_accepted: list[str] = field(default_factory=list)  # e.g. ["English", "French", "German"]; empty means not stated/checked, not "English only"
     article_types: list[ArticleType] = field(default_factory=list)
     remarks: Optional[str] = None

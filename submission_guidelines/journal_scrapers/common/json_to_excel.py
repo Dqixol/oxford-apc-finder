@@ -35,9 +35,8 @@ COLUMNS = [
     "LaTeX accepted", "LaTeX source", "LaTeX notes",
     "Template provided", "Template provided source", "Template provided notes",
     "Template URL (actual resource, if any)",
-    "ORCID required", "ORCID required source", "ORCID required notes",
     "Languages accepted",
-    "Article type", "Article type source", "Article type description", "Submission mode",
+    "Article type", "Article type source", "Article type description",
     "Total word limit (min)", "Total word limit (max)", "Total word limit (unit)",
     "Total word limit (excludes)", "Total word limit (notes)",
     "Required sections",
@@ -145,7 +144,6 @@ def record_to_rows(record: dict) -> list[list]:
     ai_v, ai_url, _ = _sourced(record, "ai_use_policy")
     latex_v, latex_url, latex_notes = _sourced(record, "latex_accepted")
     template_v, template_src_url, template_notes = _sourced(record, "template_provided")
-    orcid_v, orcid_url, orcid_notes = _sourced(record, "orcid_required")
     peer_v = _join(peer_v) if isinstance(peer_v, list) else peer_v  # value is a category list, e.g. ["single-anonymized", "double-anonymized"]
 
     rows = []
@@ -166,12 +164,10 @@ def record_to_rows(record: dict) -> list[list]:
             latex_v, latex_url, latex_notes,
             template_v, template_src_url, template_notes,
             record.get("template_url"),
-            orcid_v, orcid_url, orcid_notes,
             _join(record.get("languages_accepted")),
             at.get("type"),
             at.get("source_url"),
             at.get("description"),
-            at.get("submission_mode"),
             word_limit.get("min"),
             word_limit.get("max"),
             word_limit.get("unit"),

@@ -88,7 +88,7 @@ def build() -> JournalRecord:
             "stated on the page). Non-English submissions require an English abstract in addition to the "
             "original-language one."
         ),
-        needs_review=["peer_review_model", "preprint_policy", "robots_txt_allowed", "orcid_required"],
+        needs_review=["peer_review_model", "preprint_policy", "robots_txt_allowed"],
         source="scraped",
     )
 
