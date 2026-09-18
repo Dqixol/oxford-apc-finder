@@ -1,7 +1,10 @@
 .venv/
 __pycache__/
+node_modules/
 *.pyc
 .DS_Store
+
+package-lock.json
 
 # Local secrets (e.g. OPENALEX_API_KEY) for running the pipeline outside CI.
 .env
