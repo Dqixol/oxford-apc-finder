@@ -1,0 +1,11 @@
+// // 	// const testURL = "https://msp.org/gt/about/journal/submissions.html"	
+// // 	// const testURL = "https://www.sciencedirect.com/journal/advances-in-mathematics/publish/guide-for-authors" // Blocked
+// // 	// const testURL = "https://academic.oup.com/eurheartj/pages/General_Instructions" // NULL
+// // 	// const testURL = "https://www.lms.ac.uk/publications/jlms#submit-to-the-journal"	
+// // 	// const testURL = "https://link.springer.com/brands/springer/journal-policies"	
+// // 	const testURL = "https://www.pnas.org/author-center/submitting-your-manuscript"
+// // 	// const testURL = "https://www.thelancet.com/submission-guidelines"
+// // 	// const testURL = "https://publishingsupport.iopscience.iop.org/journals/classical-and-quantum-gravity/"
+// // 	const markdown = await scrape(testURL);
+
+// // 	console.log(markdown);
