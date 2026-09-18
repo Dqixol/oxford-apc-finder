@@ -8,7 +8,7 @@
 #
 # Two modes, chosen by whether PAGE is set:
 #   - PAGE unset (default): runs extract_journal.py against every page in
-#     page_manifests.py for ISSN, all against this one vLLM server -- looping
+#     page_manifests.py for SLUG, all against this one vLLM server -- looping
 #     in-process rather than one SLURM submission per page, since loading a
 #     70B model takes ~20 minutes and this journal's manifest has 8 pages
 #     (8 separate submissions would mean ~2.5h of pure model-loading before
@@ -42,19 +42,19 @@
 # run of THIS project's prompts specifically -- if a future journal's page
 # is longer than BMJ's, recheck against this number before assuming it fits.
 #
-# ---- REQUIRED: pass ISSN, JOURNAL_NAME, MODEL_KEY at submission time ----
+# ---- REQUIRED: pass SLUG, MODEL_KEY at submission time ----
 #
 # All 8 pages (the default, recommended first run -- Nature's ground truth,
-# data_scrapes/json/0028-0836.json, came from a real bespoke parser reading
-# all 8, not a one-time hand-transcription of one page, so this is the most
-# rigorously checked baseline to diff against in this project):
+# data_scrapes/1476-4687_nature/latest.json, came from a real bespoke parser
+# reading all 8, not a one-time hand-transcription of one page, so this is
+# the most rigorously checked baseline to diff against in this project):
 #   sbatch --job-name=extract_nature_qwen \
-#          --export=ALL,ISSN=0028-0836,JOURNAL_NAME=Nature,MODEL_KEY=qwen \
+#          --export=ALL,SLUG=1476-4687_nature,MODEL_KEY=qwen \
 #          journal_scrapers/llm_extract/run_extract.sh
 #
 # One page only (e.g. re-running just formatting-guide after a prompt tweak):
 #   sbatch --job-name=extract_nature_qwen_fmt \
-#          --export=ALL,ISSN=0028-0836,JOURNAL_NAME=Nature,PAGE=formatting-guide,\
+#          --export=ALL,SLUG=1476-4687_nature,PAGE=formatting-guide,\
 #SOURCE_URL=https://www.nature.com/nature/for-authors/formatting-guide,MODEL_KEY=qwen \
 #          journal_scrapers/llm_extract/run_extract.sh
 #
@@ -65,8 +65,7 @@
 # exact served model names (same ones categorisation's launchers use; don't
 # guess a different name, the AWQ-quantized weights are what's actually
 # cached under $HF_HOME).
-# JOURNAL_NAME is required -- unlike the old <issn>_<slug> folder convention,
-# it can't be derived from ISSN alone.
+# JOURNAL_NAME is optional (both scripts derive one from SLUG if omitted).
 # The `--export=ALL,...` prefix matters -- categorisation's CLAUDE.md flags
 # that without `ALL,`, --export REPLACES the job's environment instead of
 # adding to it, silently dropping everything the login shell normally
@@ -86,7 +85,7 @@
 
 set -euo pipefail
 
-for v in ISSN JOURNAL_NAME MODEL_KEY; do
+for v in SLUG MODEL_KEY; do
     if [ -z "${!v:-}" ]; then
         echo "ERROR: $v not set. See this script's header comment for the required --export vars."
         exit 1
@@ -104,7 +103,7 @@ fi
 echo "=== Job started: $(date) ==="
 echo "Node: $(hostname)"
 echo "Job: $SLURM_JOB_ID"
-echo "ISSN=$ISSN JOURNAL_NAME=$JOURNAL_NAME MODEL_KEY=$MODEL_KEY PAGE=${PAGE:-<all pages in manifest>} PAGES=${PAGES:-<unset>}"
+echo "SLUG=$SLUG MODEL_KEY=$MODEL_KEY PAGE=${PAGE:-<all pages in manifest>} PAGES=${PAGES:-<unset>}"
 
 # Hardcoded, not derived from the ambient $DATA env var -- see
 # categorisation's feedback memory on ARC multi-project accounts.
@@ -158,15 +157,15 @@ cd $PROJECT_ROOT/submission_guidelines
 if [ -n "${PAGE:-}" ]; then
     echo "Single-page mode: $PAGE"
     python journal_scrapers/llm_extract/client.py \
-        --issn "$ISSN" --page "$PAGE" --source-url "$SOURCE_URL" \
-        --journal-name "$JOURNAL_NAME" \
+        --slug "$SLUG" --page "$PAGE" --source-url "$SOURCE_URL" \
+        ${JOURNAL_NAME:+--journal-name "$JOURNAL_NAME"} \
         --base-url "http://localhost:${VLLM_PORT}/v1" \
         --model "$MODEL"
 else
-    echo "Multi-page mode: every page in page_manifests.py for $ISSN"
+    echo "Multi-page mode: every page in page_manifests.py for $SLUG"
     python journal_scrapers/llm_extract/extract_journal.py \
-        --issn "$ISSN" \
-        --journal-name "$JOURNAL_NAME" \
+        --slug "$SLUG" \
+        ${JOURNAL_NAME:+--journal-name "$JOURNAL_NAME"} \
         ${PAGES:+--pages "$PAGES"} \
         --base-url "http://localhost:${VLLM_PORT}/v1" \
         --model "$MODEL"

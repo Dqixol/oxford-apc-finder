@@ -1,0 +1,14 @@
+[
+  {
+    "path": "article_types[0] (Article).figure_limits[0]",
+    "claim": "Article figures: 6",
+    "quote": "A typical 6-page Article contains about 2,500 words of text and, additionally, 4 modest display items (figures and/or tables) with brief legends, reference list and online-only methods section if applicable.",
+    "verified": true
+  },
+  {
+    "path": "article_types[0] (Article).reference_limit",
+    "claim": "Article references: 50",
+    "quote": "As a guideline, Articles allow up to 50 references in the main text if needed and within the average page budget.",
+    "verified": true
+  }
+]

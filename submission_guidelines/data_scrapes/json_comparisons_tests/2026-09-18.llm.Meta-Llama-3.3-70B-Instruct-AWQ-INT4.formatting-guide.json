@@ -1,0 +1,111 @@
+{
+  "journal": "Nature",
+  "publisher": "Nature Portfolio",
+  "issn": {
+    "print": "0028-0836",
+    "electronic": "1476-4687"
+  },
+  "url": "https://www.nature.com/nature/for-authors/formatting-guide",
+  "date_scraped": "2026-09-18",
+  "robots_txt_allowed": null,
+  "peer_review_model": {
+    "value": [
+      "single-anonymized",
+      "double-anonymized"
+    ],
+    "source_url": "https://www.nature.com/nature/for-authors/formatting-guide",
+    "notes": "The text does not explicitly state the peer review model, but Nature is known to use single- and double-anonymized peer review. However, this information is not explicitly confirmed in the provided text, so it should be marked as needing review."
+  },
+  "preprint_policy": null,
+  "ai_use_policy": null,
+  "latex_accepted": {
+    "value": true,
+    "source_url": "https://www.nature.com/nature/for-authors/formatting-guide",
+    "notes": "TeX/LaTeX is accepted, but the text must be converted to Word after acceptance."
+  },
+  "template_provided": {
+    "value": true,
+    "source_url": "https://www.nature.com/nature/for-authors/formatting-guide",
+    "notes": "A template is not explicitly mentioned, but style guides are provided for chemical structures and other elements."
+  },
+  "template_url": null,
+  "languages_accepted": [
+    "English"
+  ],
+  "article_types": [
+    {
+      "type": "Article",
+      "source_url": "https://www.nature.com/nature/for-authors/formatting-guide",
+      "description": "Original research papers with significant advances and far-reaching implications.",
+      "total_word_limit": {
+        "min": 2500,
+        "max": 4300,
+        "unit": "words",
+        "excludes": [
+          "title",
+          "author list",
+          "acknowledgements",
+          "references"
+        ],
+        "notes": "The typical length of a 6-page article is 2500 words, and an 8-page article is 4300 words."
+      },
+      "required_sections": [
+        "Summary paragraph",
+        "Main text",
+        "Methods",
+        "References"
+      ],
+      "section_word_limits": [
+        {
+          "section": "Summary paragraph",
+          "limit": 200
+        },
+        {
+          "section": "Methods",
+          "limit": 3000
+        }
+      ],
+      "figure_limits": [
+        {
+          "max": 4
+        },
+        {
+          "max": 5
+        }
+      ],
+      "reference_limit": {
+        "max": 50
+      },
+      "reference_style": "Numbered, with titles and authors listed in a specific format.",
+      "author_limit": null,
+      "required_statements": [
+        "Author contributions",
+        "Competing interests statement",
+        "Funding statement"
+      ],
+      "notes": "The summary paragraph should be 200 words or less and include a brief introduction, background, and main conclusions."
+    },
+    {
+      "type": "Matters Arising and Corrections",
+      "source_url": "https://www.nature.com/nature/for-authors/formatting-guide",
+      "description": "Comments and clarifications on original research papers or other peer-reviewed material published within the past 18 months in Nature.",
+      "total_word_limit": null,
+      "required_sections": [],
+      "section_word_limits": [],
+      "figure_limits": [],
+      "reference_limit": null,
+      "reference_style": null,
+      "author_limit": null,
+      "required_statements": [],
+      "notes": "These are published online but not in print."
+    }
+  ],
+  "remarks": "Authors must make data and materials publicly available upon publication. The journal has a policy on image integrity and requires figures to be in electronic format.",
+  "needs_review": [
+    "peer_review_model",
+    "preprint_policy",
+    "ai_use_policy",
+    "robots_txt_allowed"
+  ],
+  "source": "scraped"
+}

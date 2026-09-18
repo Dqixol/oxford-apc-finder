@@ -12,21 +12,19 @@ from).
 
 Nature's 8 entries are transcribed from journal_scrapers/1476-4687_nature/
 scrape.py's own URL constants (FOR_AUTHORS_URL etc.) -- that's the actual
-source of truth for what produced data_scrapes/json/0028-0836.json, so these
-are the same URLs, not re-researched. Kept as a duplicate literal list rather
-than importing scrape.py's constants because scrape.py is a bespoke
-BeautifulSoup parser with its own heavy dependencies/parsing functions
-bundled in the same module -- importing it just for 8 strings would pull all
-of that in for no reason. If Nature's real URLs ever change, update both
-places; there's only the one journal with this duplication risk today.
-
-Keyed by issn_dir (the print ISSN, or electronic if a journal has no print
-edition) -- see base_scraper.py's issn_dir docstring.
+source of truth for what produced data_scrapes/1476-4687_nature/latest.json,
+so these are the same URLs, not re-researched. Kept as a duplicate literal
+list rather than importing scrape.py's constants because scrape.py is a
+bespoke BeautifulSoup parser with its own heavy dependencies/parsing
+functions bundled in the same module -- importing it just for 8 strings
+would pull all of that in for no reason. If Nature's real URLs ever change,
+update both places; there's only the one journal with this duplication risk
+today.
 """
 from __future__ import annotations
 
 PAGE_MANIFESTS: dict[str, list[tuple[str, str]]] = {
-    "0028-0836": [  # Nature (print ISSN)
+    "1476-4687_nature": [
         ("for-authors", "https://www.nature.com/nature/for-authors"),
         ("formatting-guide", "https://www.nature.com/nature/for-authors/formatting-guide"),
         ("other-subs", "https://www.nature.com/nature/for-authors/other-subs"),
@@ -39,13 +37,13 @@ PAGE_MANIFESTS: dict[str, list[tuple[str, str]]] = {
 }
 
 
-def pages_for_issn(issn: str) -> list[tuple[str, str]]:
-    if issn not in PAGE_MANIFESTS:
+def pages_for_slug(slug: str) -> list[tuple[str, str]]:
+    if slug not in PAGE_MANIFESTS:
         raise SystemExit(
-            f"No page manifest registered for {issn!r} in page_manifests.py. "
-            f"Registered ISSNs: {sorted(PAGE_MANIFESTS)}. Add one (page name, source URL) "
+            f"No page manifest registered for {slug!r} in page_manifests.py. "
+            f"Registered slugs: {sorted(PAGE_MANIFESTS)}. Add one (page name, source URL) "
             f"pair per page this journal's guidance is spread across -- see the file's "
             f"docstring for where the Nature URLs came from -- or pass --page/--source-url "
             f"to client.py directly for a single-page run instead."
         )
-    return PAGE_MANIFESTS[issn]
+    return PAGE_MANIFESTS[slug]

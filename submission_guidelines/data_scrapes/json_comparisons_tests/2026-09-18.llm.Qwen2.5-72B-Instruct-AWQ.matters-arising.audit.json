@@ -1,0 +1,26 @@
+[
+  {
+    "path": "article_types[0] (Matters Arising).total_word_limit",
+    "claim": "Matters Arising word limit: 1200 words",
+    "quote": "The main text should be as concise as possible, and ideally not exceed 1,200 words.",
+    "verified": true
+  },
+  {
+    "path": "article_types[0] (Matters Arising).figure_limits[0]",
+    "claim": "Matters Arising figures: 2",
+    "quote": "Contributions should have a simple message that ideally requires only one or two small figures or tables.",
+    "verified": true
+  },
+  {
+    "path": "article_types[0] (Matters Arising).reference_limit",
+    "claim": "Matters Arising references: 15",
+    "quote": "As a guideline, contributions may have up to 15 references; reference style is as for Articles.",
+    "verified": true
+  },
+  {
+    "path": "peer_review_model",
+    "claim": "Peer review model: double-anonymized",
+    "quote": "NOT FOUND",
+    "verified": false
+  }
+]

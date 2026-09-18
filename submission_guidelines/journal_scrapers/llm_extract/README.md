@@ -58,28 +58,27 @@ A journal's guidance is usually spread across several pages (see schema.py's
 docstring on `SourcedValue`/`ArticleType.source_url`) -- `client.py` only
 ever reads one `--page` per call, which is fine for a single-page journal
 like BMJ but not for Nature, whose real ground truth
-(`data_scrapes/json/0028-0836.json`) was assembled from 8 separate pages by
-its bespoke `scrape.py`.
+(`data_scrapes/1476-4687_nature/latest.json`) was assembled from 8 separate
+pages by its bespoke `scrape.py`.
 
 - **`page_manifests.py`** -- hand-researched `(page, source_url)` lists per
-  journal ISSN, the same kind of data as `common/direct_fetch.py`'s
+  journal slug, the same kind of data as `common/direct_fetch.py`'s
   `TARGETS`. Nature's 8 entries are transcribed from `scrape.py`'s own URL
-  constants, so they're the actual URLs that produced `0028-0836.json`, not
+  constants, so they're the actual URLs that produced `latest.json`, not
   re-researched. Add an entry here for any other multi-page journal before
   running it through `extract_journal.py`.
 - **`extract_journal.py`** (new) -- loops `client.py`'s `extract_page()`
-  over every page in an ISSN's manifest against one already-loaded vLLM
+  over every page in a slug's manifest against one already-loaded vLLM
   server (looping in-process, not one SLURM submission per page -- 8 pages
   as 8 separate model loads would burn ~2.5h before any real extraction
   happens), then merges the per-page records into one whole-journal
-  `data_scrapes/llm_debug/<issn>/<date>.llm.full.json` via `merge_records()` -- first-non-null-wins
-  per top-level field, article types concatenated with duplicate-name
-  collisions flagged in `remarks` rather than silently overwritten,
-  `needs_review` reconciled so a field resolved by one page isn't still
-  flagged from another. Each page's own
-  `data_scrapes/llm_debug/<issn>/<date>.llm.<page>.json`/`.audit.json` is still written too, for
-  a narrower per-page diff (see "Suggested first validation" below).
-  `merge_records()` was checked offline against
+  `<date>.llm.full.json` via `merge_records()` -- first-non-null-wins per
+  top-level field, article types concatenated with duplicate-name collisions
+  flagged in `remarks` rather than silently overwritten, `needs_review`
+  reconciled so a field resolved by one page isn't still flagged from
+  another. Each page's own `<date>.llm.<page>.json`/`.audit.json` is still
+  written too, for a narrower per-page diff (see "Suggested first
+  validation" below). `merge_records()` was checked offline against
   synthetic multi-page input before trusting it on a real run -- see the
   assertions in this file's own commit/session history if you want the
   exact cases covered (cross-page field resolution, duplicate article-type
@@ -89,6 +88,80 @@ its bespoke `scrape.py`.
   pass `PAGE`+`SOURCE_URL` together for the old single-page behavior (e.g.
   re-running just one page after a prompt tweak), or `PAGES` (plural) to
   restrict multi-page mode to a comma-separated subset of the manifest.
+
+## First real run (2026-09-18) -- what it actually validated, and one bug it found
+
+Jobs 8842988 (Qwen) / 8842989 (Llama), both `COMPLETED 0:0`, ~18min each
+including model load, against the full 8-page Nature manifest. Real,
+non-theoretical confirmation of several things this README previously only
+argued for:
+
+- **`response_format` worked on every single call, no fallback needed** --
+  16 calls per model (8 pages x 2), zero `_extract_json()`/unconstrained
+  fallback triggers logged. The guided-decoding-may-not-hold-up-at-72B risk
+  flagged earlier in this file didn't materialize, at least for this schema
+  on this model/quantization pair.
+- **Citation verification caught real gaps, not nothing** -- several claims
+  per model came back unverified (model couldn't quote real supporting text
+  for its own numeric/categorical claim), most consistently on
+  `peer-review-policy`/`ai-policy`/`registered-reports`. Worth reading
+  `*.audit.json` before trusting any specific number, not just the merged
+  JSON on its own.
+- **`merge_records()` did real work, not just passed synthetic tests** -- on
+  live output it caught genuine cross-page conflicts (e.g. Qwen's
+  `peer-review-policy` page and `ai-policy` page gave different
+  `ai_use_policy` summaries; several pages independently produced an
+  `article_types` entry named "Article") and recorded them in `remarks`
+  rather than silently overwriting, exactly as designed.
+
+**Bug found and fixed the same run**: neither `client.py` nor
+`extract_journal.py` included the model name in output filenames -- both
+jobs finished on the same day, wrote to identical paths
+(`<date>.llm.<page>.json`, `<date>.llm.full.json`), and Llama (finishing
+~5min after Qwen) silently overwrote Qwen's entire output with no error.
+Qwen's raw per-page JSON is gone; only its console summary (article-type
+names, `needs_review`, `remarks`) survived, in the SLURM log. Llama's
+surviving files were renamed to include its model tag
+(`2026-09-18.llm.Meta-Llama-3.3-70B-Instruct-AWQ-INT4.*.json`) before
+anything else could touch them. **Fixed**: both scripts now derive a
+`model_tag` from `--model` (e.g. `Qwen2.5-72B-Instruct-AWQ`) and include it
+in every output filename unconditionally -- not opt-in, so a future caller
+can't reintroduce this by forgetting to pass a tag. Re-running Qwen is the
+only way to recover its actual per-page detail; the merged summary in the
+log is not a substitute for the real JSON.
+
+**`article_types` over-count, found in both runs, fixed 2026-09-18 -- re-run pending
+verification**: both models returned noticeably more article types than
+Nature's real 7 (Qwen: 22, Llama: 10, vs the known-good 7 in `latest.json`).
+Two distinct causes, addressed separately rather than papered over with one
+blunt fix:
+1. **Rule 8 under-followed, mainly by Qwen** on `ai-policy`/`peer-review-policy`
+   -- entries like "News and Comment", "Obituaries", "Careers", "Technology
+   features" are Nature *content sections* mentioned in passing on pages
+   whose real subject is something else, not submittable article types with
+   real formatting guidance behind them. **Fixed**: `prompts.py`'s rule 8 now
+   names this exact failure pattern (a policy page mentioning "the journal
+   publishes X, Y, Z" is not a submission-guidance page for X/Y/Z) and
+   requires an entry have real content beyond the bare name to qualify.
+2. **Inconsistent naming for the same real type across independent per-page
+   calls** (e.g. "Registered Report" vs "Registered Reports", "Article" vs
+   "Research Article") -- inherent to the architecture (each page's call has
+   no visibility into how another page's call named the same thing), not
+   something a prompt fix alone can guarantee against. **Fixed the safe part
+   only**: `merge_records()`'s dedup key is now case/whitespace-insensitive,
+   catching exact-modulo-formatting duplicates ("Registered Report " vs
+   "registered report"). Deliberately NOT fuzzy-matched beyond that --
+   collapsing "Article" and "Research Article" automatically risks silently
+   merging two things that might genuinely differ; a real naming collision
+   still surfaces as a separate entry plus a `remarks` note, for a human to
+   judge. Verified offline against a synthetic case/whitespace-variant pair
+   before trusting it on a real run.
+
+Both fixes went into a second real run (Qwen + Llama, same 8-page Nature
+manifest) to check they actually move the count, not just look right in
+isolation -- see whichever `*.full.json` is newest for the result, and
+diff `article_types` count/names against this same section's numbers above
+if you want the before/after directly.
 
 ## Files
 
@@ -110,8 +183,7 @@ its bespoke `scrape.py`.
   fields (notes, description) aren't checked this way -- there's no crisp claim to verify a
   quote against for open-ended prose.
 - `client.py` -- wires it together: reads the `.md` file `clean_text.py` produced, runs both
-  model calls, verifies citations, saves `data_scrapes/llm_debug/<issn>/<date>.llm.json` and
-  `data_scrapes/llm_debug/<issn>/<date>.llm.audit.json`.
+  model calls, verifies citations, saves `<date>.llm.json` and `<date>.llm.audit.json`.
 
 ## Setup
 
@@ -119,30 +191,29 @@ its bespoke `scrape.py`.
 # once, against the shared envs/vllm-env (trafilatura is not currently installed there):
 /data/biol-thriving/magd4194/envs/vllm-env/bin/pip install trafilatura
 
-python clean_text.py --issn 0959-8138      # once per journal (or omit --issn to do all of them)
+python clean_text.py --slug 1756-1833_bmj      # once per journal (or omit --slug to do all of them)
 
 # on HPC: submit run_extract.sh instead of running client.py/extract_journal.py directly (see
 # its header comment for the required --export vars) -- it starts vLLM, waits for it, runs the
 # extraction, tears the server down. Default (PAGE unset) runs every page in page_manifests.py:
 sbatch --job-name=extract_nature_qwen \
-    --export=ALL,ISSN=0028-0836,JOURNAL_NAME=Nature,MODEL_KEY=qwen \
+    --export=ALL,SLUG=1476-4687_nature,MODEL_KEY=qwen \
     run_extract.sh
 
 # one page only (PAGE+SOURCE_URL set together):
 sbatch --job-name=extract_nature_qwen_fmt \
-    --export=ALL,ISSN=0028-0836,JOURNAL_NAME=Nature,PAGE=formatting-guide,\
+    --export=ALL,SLUG=1476-4687_nature,PAGE=formatting-guide,\
 SOURCE_URL=https://www.nature.com/nature/for-authors/formatting-guide,MODEL_KEY=qwen \
     run_extract.sh
 
 # or, against an already-running server (e.g. an interactive salloc session):
-python extract_journal.py --issn 0028-0836 --journal-name Nature \
+python extract_journal.py --slug 1476-4687_nature \
     --base-url http://localhost:<port>/v1 --model Qwen/Qwen2.5-72B-Instruct-AWQ
 ```
 
-`--issn` and `--page` point at an existing `data_scrapes/raw_html/<issn>/<page>.md` (produced
+`--slug` and `--page` point at an existing `data_scrapes/<slug>/raw_html/<page>.md` (produced
 by `clean_text.py` from the `.html` `direct_fetch.py` already fetched) -- neither script here
-fetches anything from the network itself. `--journal-name` is required on both scripts, since
-it can no longer be derived from a `<issn>_<slug>` folder name the way it once was.
+fetches anything from the network itself.
 
 ## What's genuinely untested
 
@@ -162,7 +233,7 @@ to these prompts. Expect to iterate on wording once you see real output, particu
   worth checking vLLM's server-side logs on a first real run for guided-decoding warnings/
   fallback-to-unguided messages, not just whether the call succeeds), or whether the
   `_extract_json()` fallback path ends up doing most of the real work in practice.
-- Whether a 70B model reliably follows rule 2 (confirmed-absence vs. not-checked) and rule 5
+- Whether a 70B model reliably follows rule 2 (confirmed-absence vs. not-checked) and rule 4
   (peer review as a category list, not a sentence) without more few-shot examples than the one
   provided. If it doesn't, adding a second few-shot pair (maybe BMJ's Editorials, which has a
   real min/max range) is the natural next step.
@@ -174,25 +245,23 @@ to these prompts. Expect to iterate on wording once you see real output, particu
 
 ## Suggested first validation
 
-Run the full 8-page manifest against Nature (`sbatch ... --export=ALL,ISSN=0028-0836,
-JOURNAL_NAME=Nature,MODEL_KEY=qwen run_extract.sh`, or the `llama` arm the same way), not BMJ and
-not a single page -- Nature's ground truth (`data_scrapes/json/0028-0836.json`) came from a real
-bespoke parser (`journal_scrapers/1476-4687_nature/scrape.py`, re-derives every fact from the
-live pages) rather than a one-time hand-transcription like BMJ/Annals/Frontiers, so it's the most
-rigorously checked baseline in the project to diff against, and now that `extract_journal.py`
-covers every page the manifest lists, the comparison can be the *whole* `0028-0836.json`, not
-just the `formatting-guide` subset an earlier draft of this section recommended.
+Run the full 8-page manifest against Nature (`sbatch ... --export=ALL,SLUG=1476-4687_nature,
+MODEL_KEY=qwen run_extract.sh`, or the `llama` arm the same way), not BMJ and not a single page --
+Nature's ground truth (`latest.json`) came from a real bespoke parser (`1476-4687_nature/scrape.py`,
+re-derives every fact from the live pages) rather than a one-time hand-transcription like BMJ/
+Annals/Frontiers, so it's the most rigorously checked baseline in the project to diff against, and
+now that `extract_journal.py` covers every page the manifest lists, the comparison can be the
+*whole* `latest.json`, not just the `formatting-guide` subset an earlier draft of this section
+recommended.
 
 **Two levels to diff at**:
-- **`data_scrapes/llm_debug/0028-0836/<date>.llm.full.json`** (the merged record) against the
-  whole of `data_scrapes/json/0028-0836.json` -- this is now a fair, complete comparison, since
-  every field `0028-0836.json` has a `source_url` for should have come from a page
-  `extract_journal.py` actually ran.
-- **`data_scrapes/llm_debug/0028-0836/<date>.llm.<page>.json`** (per-page, e.g.
-  `<date>.llm.formatting-guide.json`) against just the fields whose `source_url` in
-  `0028-0836.json` matches that page -- useful for isolating which specific page's extraction is
-  weak, or for a quick single-page re-check with
-  `PAGE`+`SOURCE_URL` after a prompt tweak, without re-running all 8.
+- **`<date>.llm.full.json`** (the merged record) against the whole of `latest.json` -- this is
+  now a fair, complete comparison, since every field `latest.json` has a `source_url` for should
+  have come from a page `extract_journal.py` actually ran.
+- **`<date>.llm.<page>.json`** (per-page, e.g. `<date>.llm.formatting-guide.json`) against just
+  the fields whose `source_url` in `latest.json` matches that page -- useful for isolating which
+  specific page's extraction is weak, or for a quick single-page re-check with `PAGE`+
+  `SOURCE_URL` after a prompt tweak, without re-running all 8.
 
 If a field the model should have caught comes back `null`/in `needs_review` in the merged output,
 check `merge_records()`'s `remarks` field first -- a genuine cross-page collision (two pages both

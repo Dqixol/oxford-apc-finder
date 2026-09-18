@@ -1,0 +1,32 @@
+[
+  {
+    "path": "article_types[0] (Article).total_word_limit",
+    "claim": "Article word limit: 2500-4300 words",
+    "quote": "The typical length of a 6-page article with 4 modest display items (figures and tables) is 2500 words (summary paragraph plus body text). The typical length of an 8-page article with 5-6 modest display items is 4300 words.",
+    "verified": true
+  },
+  {
+    "path": "article_types[0] (Article).figure_limits[0]",
+    "claim": "Article figures: 4",
+    "quote": "The typical length of a 6-page article with 4 modest display items (figures and tables) is 2500 words (summary paragraph plus body text).",
+    "verified": true
+  },
+  {
+    "path": "article_types[0] (Article).figure_limits[1]",
+    "claim": "Article figures: 5",
+    "quote": "The typical length of an 8-page article with 5-6 modest display items is 4300 words.",
+    "verified": true
+  },
+  {
+    "path": "article_types[0] (Article).reference_limit",
+    "claim": "Article references: 50",
+    "quote": "As a guideline, articles typically have no more than 50 references.",
+    "verified": true
+  },
+  {
+    "path": "peer_review_model",
+    "claim": "Peer review model: single-anonymized, double-anonymized",
+    "quote": "NOT FOUND",
+    "verified": false
+  }
+]

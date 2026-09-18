@@ -6,23 +6,23 @@ Why this exists: a journal's guidance is usually spread across several pages
 (the whole reason SourcedValue/ArticleType.source_url exist in schema.py --
 see its docstring), but client.py's extract_page() only ever sees one page's
 text per call, the same way the real Nature ground truth
-(data_scrapes/json/0028-0836.json) was assembled from 8 separate
+(data_scrapes/1476-4687_nature/latest.json) was assembled from 8 separate
 page reads, not one. Looping inside one Python process (rather than
 resubmitting a SLURM job per page) matters because loading a 70B model takes
 ~20 minutes -- 8 pages as 8 separate run_extract.sh submissions would mean
 ~2.5 hours of pure model-loading before any real work happens.
 
-Usage (see run_extract.sh, which now calls this by default when only ISSN
+Usage (see run_extract.sh, which now calls this by default when only SLUG
 is given -- pass PAGE too on top of that for the old single-page behavior):
-    python extract_journal.py --issn 0028-0836 --journal-name Nature \\
+    python extract_journal.py --slug 1476-4687_nature \\
         --base-url http://localhost:8000/v1 --model Qwen/Qwen2.5-72B-Instruct-AWQ
 
-Each page still gets its own `llm_debug/<date>.llm.<page>.json` / `.audit.json`
-(so you can diff any one page's output against its own slice of
-data_scrapes/json/<issn>.json, as llm_extract/README.md's "Suggested first
-validation" section describes for formatting-guide specifically) -- this just
-additionally writes one merged `llm_debug/<date>.llm.full.json` covering the
-whole journal, comparable field-for-field against that same file.
+Each page still gets its own `<date>.llm.<page>.json` / `.audit.json` (so
+you can diff any one page's output against its own slice of latest.json, as
+llm_extract/README.md's "Suggested first validation" section describes for
+formatting-guide specifically) -- this just additionally writes one merged
+`<date>.llm.full.json` covering the whole journal, comparable field-for-field
+against the whole of latest.json.
 """
 from __future__ import annotations
 
@@ -34,10 +34,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from client import DATA_SCRAPES_DIR, check_vllm, extract_page  # noqa: E402
-from page_manifests import pages_for_issn  # noqa: E402
+from page_manifests import pages_for_slug  # noqa: E402
 
 
-def merge_records(journal_name: str, issn_hint: str, page_records: list[tuple[str, dict]]) -> dict:
+def merge_records(slug: str, journal_name: str, issn_hint: str, page_records: list[tuple[str, dict]]) -> dict:
     """Combines one JournalRecord dict per page into a single whole-journal
     record. Simple, auditable rules rather than anything clever -- this is
     meant to be spot-checked against latest.json, not trusted blindly:
@@ -114,14 +114,23 @@ def merge_records(journal_name: str, issn_hint: str, page_records: list[tuple[st
 
         for at in record.get("article_types") or []:
             name = at.get("type", "?")
-            if name in seen_article_types:
+            # Case/whitespace-insensitive only -- NOT fuzzy. Deliberately doesn't try to catch
+            # "Registered Report" vs "Registered Reports" or "Article" vs "Research Article":
+            # collapsing those automatically risks silently merging two things that are
+            # genuinely different, which is worse than the inflated count this is meant to fix.
+            # Real near-duplicates from inconsistent model naming across independent per-page
+            # calls still show up as separate entries with a remarks collision note (see the
+            # else branch) -- that's a prompt-consistency problem, not something safe to paper
+            # over here.
+            dedup_key = " ".join(name.split()).lower()
+            if dedup_key in seen_article_types:
                 remarks_parts.append(
                     f"[{page}] also produced an article type named '{name}', already supplied by "
-                    f"[{seen_article_types[name]}] -- kept the earlier one; check both pages by hand "
+                    f"[{seen_article_types[dedup_key]}] -- kept the earlier one; check both pages by hand "
                     f"if they might describe genuinely different things under the same name."
                 )
                 continue
-            seen_article_types[name] = page
+            seen_article_types[dedup_key] = page
             merged["article_types"].append(at)
 
         if record.get("remarks"):
@@ -143,8 +152,8 @@ def merge_records(journal_name: str, issn_hint: str, page_records: list[tuple[st
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--issn", required=True, help="e.g. 0028-0836 -- must have an entry in page_manifests.py")
-    ap.add_argument("--journal-name", required=True, help="can't be derived from --issn alone, unlike the old <issn>_<slug> convention")
+    ap.add_argument("--slug", required=True, help="e.g. 1476-4687_nature -- must have an entry in page_manifests.py")
+    ap.add_argument("--journal-name", default=None, help="defaults to the slug's second half if omitted")
     ap.add_argument("--base-url", required=True, help="your vLLM OpenAI-compatible endpoint, e.g. http://host:8000/v1")
     ap.add_argument("--model", required=True, help="the model name as vLLM is serving it, e.g. Qwen/Qwen2.5-72B-Instruct-AWQ")
     ap.add_argument("--pages", default=None, help="comma-separated subset of page names to run (default: every page in the manifest)")
@@ -159,32 +168,35 @@ def main() -> None:
 
     client = OpenAI(base_url=args.base_url, api_key="EMPTY")
 
-    manifest = pages_for_issn(args.issn)
+    manifest = pages_for_slug(args.slug)
     if args.pages:
         wanted = set(args.pages.split(","))
         manifest = [(p, u) for p, u in manifest if p in wanted]
         missing = wanted - {p for p, _ in manifest}
         if missing:
-            raise SystemExit(f"--pages named {sorted(missing)}, not present in the manifest for {args.issn!r}")
+            raise SystemExit(f"--pages named {sorted(missing)}, not present in the manifest for {args.slug!r}")
 
-    print(f"Running extraction for {args.journal_name} across {len(manifest)} page(s): {[p for p, _ in manifest]}")
+    journal_name = args.journal_name or args.slug.split("_", 1)[1].replace("-", " ").title()
+    issn_hint = args.slug.split("_", 1)[0]
+
+    print(f"Running extraction for {journal_name} across {len(manifest)} page(s): {[p for p, _ in manifest]}")
 
     page_records: list[tuple[str, dict]] = []
     for page, source_url in manifest:
         print(f"\n--- {page} ({source_url}) ---")
         record, _report = extract_page(
             client, args.model,
-            issn=args.issn, page=page, source_url=source_url, journal_name=args.journal_name,
+            slug=args.slug, page=page, source_url=source_url, journal_name=journal_name,
             use_inline_schema=args.use_inline_schema, out_suffix=page,
         )
         page_records.append((page, record))
 
-    merged = merge_records(args.journal_name, args.issn, page_records)
+    merged = merge_records(args.slug, journal_name, issn_hint, page_records)
 
-    out_dir = DATA_SCRAPES_DIR / "llm_debug" / args.issn
-    out_dir.mkdir(parents=True, exist_ok=True)
+    out_dir = DATA_SCRAPES_DIR / args.slug
     today = date.today().isoformat()
-    merged_path = out_dir / f"{today}.llm.full.json"
+    model_tag = args.model.rsplit("/", 1)[-1]  # see client.extract_page()'s comment: model MUST be in the filename
+    merged_path = out_dir / f"{today}.llm.{model_tag}.full.json"
     merged_path.write_text(json.dumps(merged, indent=2, ensure_ascii=False), encoding="utf-8")
 
     print(f"\nWrote merged whole-journal record: {merged_path}")

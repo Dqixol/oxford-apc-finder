@@ -34,8 +34,8 @@ Run clean_text.py first -- this reads the .md file it produces, not the raw
 that turned out to matter for real pages -- see clean_text.py's docstring).
 
 Usage (see run_extract.sh for the SLURM wrapper that actually starts vLLM):
-    python clean_text.py --issn 0959-8138        # once, produces .md files
-    python client.py --issn 0959-8138 --page article-types --journal-name "The BMJ" \\
+    python clean_text.py --slug 1756-1833_bmj        # once, produces .md files
+    python client.py --slug 1756-1833_bmj --page article-types \\
         --source-url https://www.bmj.com/about-bmj/resources-authors/article-types \\
         --base-url http://<your-hpc-host>:8000/v1 --model Qwen/Qwen2.5-72B-Instruct-AWQ
 """
@@ -146,7 +146,7 @@ def extract_page(
     client,
     model: str,
     *,
-    issn: str,
+    slug: str,
     page: str,
     source_url: str,
     journal_name: str,
@@ -167,7 +167,7 @@ def extract_page(
 
     Returns (record, report) so a caller can merge multiple pages' records
     -- see extract_journal.py's merge_records()."""
-    md_path = DATA_SCRAPES_DIR / "raw_html" / issn / f"{page}.md"
+    md_path = DATA_SCRAPES_DIR / slug / "raw_html" / f"{page}.md"
     if not md_path.exists():
         html_path = md_path.with_suffix(".html")
         hint = "run clean_text.py first" if html_path.exists() else "has direct_fetch.py been run for this journal/page?"
@@ -206,10 +206,17 @@ def extract_page(
     else:
         report = []
 
-    out_dir = DATA_SCRAPES_DIR / "llm_debug" / issn
+    out_dir = DATA_SCRAPES_DIR / slug
     out_dir.mkdir(parents=True, exist_ok=True)
-    tag = out_suffix or ""
-    tag = f".{tag}" if tag else ""
+    # model_tag is REQUIRED in every output filename, not just page -- found the hard way on
+    # 2026-09-18's first real run: two jobs (Qwen, Llama) against the same slug on the same day
+    # wrote to identical paths with no model in the name, and the second job to finish silently
+    # overwrote the first's output with no error, no warning. Deriving it from `model` itself
+    # (rather than trusting a caller to pass a unique tag) means this can't regress even if a
+    # future caller forgets to think about it.
+    model_tag = model.rsplit("/", 1)[-1]
+    page_tag = f".{out_suffix}" if out_suffix else ""
+    tag = f".{model_tag}{page_tag}"
     (out_dir / f"{today}.llm{tag}.json").write_text(json.dumps(record, indent=2, ensure_ascii=False), encoding="utf-8")
     (out_dir / f"{today}.llm{tag}.audit.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
 
@@ -229,9 +236,9 @@ def main() -> None:
         "(Nature and others -- see page_manifests.py), use extract_journal.py instead so all "
         "pages run against one already-loaded vLLM server."
     )
-    ap.add_argument("--issn", required=True, help="e.g. 0959-8138 (the data_scrapes/<issn> folder -- print ISSN, or electronic if the journal has no print edition)")
+    ap.add_argument("--slug", required=True, help="e.g. 1756-1833_bmj (the data_scrapes/<slug> folder)")
     ap.add_argument("--page", required=True, help="page filename without .html, e.g. article-types")
-    ap.add_argument("--journal-name", required=True, help="can't be derived from --issn alone, unlike the old <issn>_<slug> convention")
+    ap.add_argument("--journal-name", default=None, help="defaults to the slug's second half if omitted")
     ap.add_argument("--source-url", required=True)
     ap.add_argument("--base-url", required=True, help="your vLLM OpenAI-compatible endpoint, e.g. http://host:8000/v1")
     ap.add_argument("--model", required=True, help="the model name as vLLM is serving it, e.g. Qwen/Qwen2.5-72B-Instruct-AWQ")
@@ -246,9 +253,10 @@ def main() -> None:
 
     client = OpenAI(base_url=args.base_url, api_key="EMPTY")  # vLLM doesn't validate this; "EMPTY" matches categorisation's convention
 
+    journal_name = args.journal_name or args.slug.split("_", 1)[1].replace("-", " ").title()
     extract_page(
         client, args.model,
-        issn=args.issn, page=args.page, source_url=args.source_url, journal_name=args.journal_name,
+        slug=args.slug, page=args.page, source_url=args.source_url, journal_name=journal_name,
         use_inline_schema=args.use_inline_schema,
     )
 

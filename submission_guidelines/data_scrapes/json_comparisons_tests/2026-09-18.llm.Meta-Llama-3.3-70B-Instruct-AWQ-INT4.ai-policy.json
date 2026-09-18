@@ -1,0 +1,42 @@
+{
+  "journal": "Nature",
+  "publisher": "Springer Nature",
+  "issn": {
+    "print": "0028-0836",
+    "electronic": "1476-4687"
+  },
+  "url": "https://www.nature.com/nature-portfolio/editorial-policies/ai",
+  "date_scraped": "2026-09-18",
+  "robots_txt_allowed": null,
+  "peer_review_model": {
+    "value": [
+      "single-anonymized",
+      "double-anonymized"
+    ],
+    "notes": "Not explicitly stated in the provided text, but generally known for Nature"
+  },
+  "preprint_policy": null,
+  "ai_use_policy": {
+    "value": "Springer Nature supports responsible and transparent AI use, treating AI as a supporting technology with human accountability and scholarly judgement always remaining human.",
+    "source_url": "https://www.nature.com/nature-portfolio/editorial-policies/ai",
+    "notes": "A risk-assessment framework governs AI use across research and publishing lifecycle, emphasizing transparency, human accountability, and non-delegation of scholarly judgement to AI systems."
+  },
+  "latex_accepted": null,
+  "template_provided": null,
+  "template_url": null,
+  "languages_accepted": [
+    "English"
+  ],
+  "article_types": [],
+  "remarks": "No direct information on article submission guidelines, word limits, or specific article types. The page focuses on AI policy and usage guidelines for authors, reviewers, and editors.",
+  "needs_review": [
+    "peer_review_model",
+    "preprint_policy",
+    "robots_txt_allowed",
+    "latex_accepted",
+    "template_provided",
+    "template_url",
+    "article_types"
+  ],
+  "source": "scraped"
+}

@@ -1,0 +1,41 @@
+{
+  "journal": "Nature",
+  "publisher": "Springer Nature",
+  "issn": {
+    "print": "0028-0836",
+    "electronic": "1476-4687"
+  },
+  "url": "https://www.nature.com/nature-research/editorial-policies/peer-review",
+  "date_scraped": "2026-09-18",
+  "robots_txt_allowed": null,
+  "peer_review_model": {
+    "value": [
+      "single-anonymized",
+      "double-anonymized"
+    ],
+    "source_url": "https://www.nature.com/nature-research/editorial-policies/peer-review",
+    "notes": "Single-anonymized is the default, but double-anonymized is an option for some Nature-branded and Communications journals."
+  },
+  "preprint_policy": null,
+  "ai_use_policy": {
+    "value": "Peer reviewers are asked not to upload manuscripts into generative AI tools. If any part of the evaluation was supported by an AI tool, reviewers must declare this transparently.",
+    "source_url": "https://www.nature.com/nature-research/editorial-policies/peer-review",
+    "notes": null
+  },
+  "latex_accepted": null,
+  "template_provided": null,
+  "template_url": null,
+  "languages_accepted": [
+    "English"
+  ],
+  "article_types": [],
+  "remarks": "The page focuses on peer review policies and does not provide submission guidelines for specific article types.",
+  "needs_review": [
+    "latex_accepted",
+    "template_provided",
+    "template_url",
+    "languages_accepted",
+    "article_types"
+  ],
+  "source": "scraped"
+}

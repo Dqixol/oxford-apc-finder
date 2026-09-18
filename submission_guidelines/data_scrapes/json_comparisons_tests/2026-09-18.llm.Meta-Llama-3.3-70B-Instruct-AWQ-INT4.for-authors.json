@@ -1,0 +1,34 @@
+{
+  "journal": "Nature",
+  "publisher": null,
+  "issn": {
+    "print": null,
+    "electronic": null
+  },
+  "url": "https://www.nature.com/nature/for-authors",
+  "date_scraped": "2026-09-18",
+  "robots_txt_allowed": null,
+  "peer_review_model": null,
+  "preprint_policy": null,
+  "ai_use_policy": null,
+  "latex_accepted": null,
+  "template_provided": null,
+  "template_url": null,
+  "languages_accepted": [],
+  "article_types": [],
+  "remarks": "Page provides general guidance for authors but does not specify details such as word limits, reference styles, or author limits.",
+  "needs_review": [
+    "publisher",
+    "issn.print",
+    "issn.electronic",
+    "peer_review_model",
+    "preprint_policy",
+    "ai_use_policy",
+    "latex_accepted",
+    "template_provided",
+    "template_url",
+    "languages_accepted",
+    "article_types",
+    "robots_txt_allowed"
+  ]
+}

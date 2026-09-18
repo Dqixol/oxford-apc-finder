@@ -1,0 +1,74 @@
+{
+  "journal": "Nature",
+  "publisher": "Nature Research",
+  "issn": {
+    "print": "0028-0836",
+    "electronic": "1476-4687"
+  },
+  "url": "https://www.nature.com/nature/for-authors/matters-arising",
+  "date_scraped": "2026-09-18",
+  "robots_txt_allowed": null,
+  "peer_review_model": {
+    "value": [
+      "single-anonymized"
+    ],
+    "notes": "Independent referees are used for Matters Arising submissions that meet initial selection criteria, but details on the anonymity of the process are not provided."
+  },
+  "preprint_policy": {
+    "value": "Allowed for declined submissions",
+    "notes": "Authors who have had a submission declined are encouraged to post it on an appropriate preprint server."
+  },
+  "ai_use_policy": null,
+  "latex_accepted": null,
+  "template_provided": null,
+  "template_url": null,
+  "languages_accepted": [
+    "English"
+  ],
+  "article_types": [
+    {
+      "type": "Matters Arising",
+      "source_url": "https://www.nature.com/nature/for-authors/matters-arising",
+      "description": "Formal post-publication commentary on published research papers in Nature, usually published alongside a Reply from the original authors.",
+      "total_word_limit": {
+        "min": null,
+        "max": 1200,
+        "unit": "words",
+        "excludes": [
+          "Supplementary Information"
+        ],
+        "notes": "Main text should be as concise as possible, ideally not exceeding 1200 words."
+      },
+      "required_sections": [
+        "Brief summary paragraph for non-specialist readership (used as abstract for submission purposes)"
+      ],
+      "section_word_limits": [],
+      "figure_limits": [
+        {
+          "max": 2,
+          "notes": "Ideally only one or two small figures or tables; complex figures or tables may be presented as Extended Data items (ideally no more than three)."
+        }
+      ],
+      "reference_limit": {
+        "max": 15,
+        "notes": "Reference style is as for Articles."
+      },
+      "reference_style": "As for Articles",
+      "author_limit": null,
+      "required_statements": [
+        "Competing interests statement",
+        "Author contributions statement"
+      ],
+      "notes": "Published online but not in print; must be based on knowledge contemporaneous with the original paper, rather than subsequent scientific developments; must not contain inflammatory or intemperate language."
+    }
+  ],
+  "remarks": "Does not consider Matters Arising on papers published in other journals or on Nature papers published more than 18 months ago.",
+  "needs_review": [
+    "robots_txt_allowed",
+    "ai_use_policy",
+    "latex_accepted",
+    "template_provided",
+    "template_url"
+  ],
+  "source": "scraped"
+}

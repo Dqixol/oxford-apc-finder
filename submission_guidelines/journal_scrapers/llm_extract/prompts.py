@@ -72,7 +72,7 @@ Authors whose papers are accepted for publication in the Annals of Mathematics m
 Authors of accepted papers will receive 10 offprints and a copy of published issue. Extra offprints may be purchased through the editorial office.
 """
 
-# The real, verified output for the text above -- see data_scrapes/json/0003-486X.json
+# The real, verified output for the text above -- see data_scrapes/1939-8980_annals-of-mathematics/latest.json
 FEW_SHOT_OUTPUT = {
     "journal": "Annals of Mathematics",
     "publisher": "Princeton University (self-published)",
@@ -164,7 +164,16 @@ fees, a one-line mention in `remarks` is fine; don't invent a dedicated field fo
 
 8. Only include an article type if authors can actually submit to it (a real research/opinion/ \
 letter category with some formatting guidance). Exclude purely staff-written content (news, \
-careers pages, "solely commissioned by our editors" with no author-submission path at all).
+careers pages, "solely commissioned by our editors" with no author-submission path at all) -- \
+this includes regularly-published magazine-style sections such as news, obituaries, editor \
+commentary/world-view pieces, books & arts coverage, fiction/"futures" slots, and technology- \
+feature roundups, even when the page happens to name them. A page whose real subject is \
+something else (an editorial policy, an AI-use policy, a peer-review policy) sometimes mentions \
+"the journal publishes X, Y, Z" in passing while explaining that other subject -- that passing \
+mention is NOT a submission-guidance page for X, Y, or Z. Don't create an article_types entry \
+just because a name appeared; only create one where the text actually gives you something to \
+put in its fields (a word limit, required sections, a description of what the type is for, \
+etc.) beyond the bare name. If you can't fill in anything past `type`, leave it out.
 
 9. Do not invent URLs. `source_url` should be the URL you were told this text came from, or \
 null if you don't know it. Do not guess a template/resource URL that isn't given to you \
