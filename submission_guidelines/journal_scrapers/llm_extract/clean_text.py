@@ -22,7 +22,7 @@ but a real, checked baseline.
 Run directly to batch-convert every fetched HTML page across all journals:
     python clean_text.py
 Or for one journal only:
-    python clean_text.py --slug 1756-1833_bmj
+    python clean_text.py --issn 0959-8138
 """
 from __future__ import annotations
 
@@ -42,8 +42,7 @@ def html_to_markdown(html: str) -> str | None:
     return trafilatura.extract(html, output_format="markdown", include_tables=True, include_links=False)
 
 
-def convert_journal(slug_dir: Path) -> list[tuple[Path, bool]]:
-    raw_dir = slug_dir / "raw_html"
+def convert_journal(raw_dir: Path) -> list[tuple[Path, bool]]:
     if not raw_dir.is_dir():
         return []
     results = []
@@ -59,19 +58,20 @@ def convert_journal(slug_dir: Path) -> list[tuple[Path, bool]]:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--slug", default=None, help="convert only this journal (e.g. 1756-1833_bmj); default: all")
+    ap.add_argument("--issn", default=None, help="convert only this journal (e.g. 0959-8138); default: all")
     args = ap.parse_args()
 
-    slug_dirs = [DATA_SCRAPES_DIR / args.slug] if args.slug else sorted(DATA_SCRAPES_DIR.glob("*"))
+    raw_html_dir = DATA_SCRAPES_DIR / "raw_html"
+    issn_dirs = [raw_html_dir / args.issn] if args.issn else sorted(raw_html_dir.glob("*"))
 
     total = ok = 0
-    for slug_dir in slug_dirs:
-        if not slug_dir.is_dir():
+    for issn_dir in issn_dirs:
+        if not issn_dir.is_dir():
             continue
-        results = convert_journal(slug_dir)
+        results = convert_journal(issn_dir)
         if not results:
             continue
-        print(f"\n=== {slug_dir.name} ===")
+        print(f"\n=== {issn_dir.name} ===")
         for html_path, success in results:
             total += 1
             ok += success

@@ -1,7 +1,7 @@
 """Flatten scraped journal JSON records into a single Excel workbook for easy review.
 
-Reads every data_scrapes/<issn>_<slug>/latest.json and writes one row per
-(journal, article type) to data_scrapes/journals_overview.xlsx. Nested fields
+Reads every data_scrapes/json/<issn>.json and writes one row per (journal,
+article type) to data_scrapes/journals_overview.xlsx. Nested fields
 (required sections, section word limits, figure limits, needs_review) are
 joined into single "; "-separated cells rather than spread across columns,
 since the number of article types/sections/figure-limit entries varies per
@@ -205,8 +205,8 @@ def build_workbook(records: list[dict]) -> Workbook:
 
 def load_latest_records(data_dir: Path = DATA_SCRAPES_DIR) -> list[dict]:
     records = []
-    for latest_path in sorted(data_dir.glob("*/latest.json")):
-        with latest_path.open(encoding="utf-8") as f:
+    for record_path in sorted((data_dir / "json").glob("*.json")):
+        with record_path.open(encoding="utf-8") as f:
             records.append(json.load(f))
     return records
 
@@ -214,7 +214,7 @@ def load_latest_records(data_dir: Path = DATA_SCRAPES_DIR) -> list[dict]:
 def main() -> Path:
     records = load_latest_records()
     if not records:
-        raise SystemExit(f"No latest.json files found under {DATA_SCRAPES_DIR}")
+        raise SystemExit(f"No *.json files found under {DATA_SCRAPES_DIR / 'json'}")
     wb = build_workbook(records)
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     wb.save(OUTPUT_PATH)

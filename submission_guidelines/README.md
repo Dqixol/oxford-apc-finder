@@ -21,15 +21,19 @@ journal_scrapers/
                                 # from a one-time read (BMJ, Annals of Mathematics, Frontiers in Sustainable Food Systems)
   llm_extract/
     clean_text.py               # HTML -> clean Markdown (trafilatura); run this first -- tested against all 21 fetched journals
-    json_schema.py                # generates a JSON Schema from schema.py, for constrained LLM decoding (e.g. vLLM guided_json)
+    json_schema.py                # generates a JSON Schema from schema.py, for constrained LLM decoding (vLLM response_format)
     prompts.py                      # extraction + citation-verification prompt templates, with a real few-shot example
     verify.py                         # checks a model's cited quotes are real substrings of the source text
-    client.py                           # runs both calls against a self-hosted model (Qwen/Llama via vLLM) -- see its README
+    client.py                           # runs both calls against ONE page for a self-hosted model (Qwen/Llama via vLLM)
+    page_manifests.py                     # per-journal (page, source_url) lists, for journals whose guidance spans several pages
+    extract_journal.py                      # loops client.py over every page in a journal's manifest + merges into one record
+    run_extract.sh                            # SLURM launcher: starts vLLM, runs the extraction, tears it down -- see llm_extract/README.md
 data_scrapes/
-  <issn>_<journal-slug>/
-    raw_html/                 # fetched pages/PDFs -- the corpus direct_fetch.py and scrape.py write into
-    latest.json                # most recent structured extraction (only exists where a scrape.py has been built)
-    YYYY-MM-DD.json              # dated snapshots
+  raw_html/
+    <issn>/                    # print ISSN, no journal-name slug (electronic only if there's no print edition)
+      *.html, *.md              # fetched pages/PDFs, and clean_text.py's .md conversions of them
+  json/
+    <issn>.json                # one current structured record per journal (same <issn> as its raw_html/ folder)
 docs/
   RSETraining AI Project.xlsx    # original source spreadsheet: candidate journals + proposed fields
   journal_list.rtf                # expanded/updated candidate journal list
@@ -39,7 +43,16 @@ archive/
   example_webarchive_API_code/       # Node.js Wayback Machine exploration (Readability+Turndown); not part of the live pipeline
 ```
 
-`<issn>` is the electronic ISSN where available (falls back to print ISSN).
+`journal_scrapers/<issn>_<journal-slug>/`'s `<issn>` is the electronic ISSN where available
+(falls back to print ISSN) -- this is source code, one folder per journal we've built a
+scraper/extractor for, and its naming is unrelated to `data_scrapes/`.
+
+`data_scrapes/`'s `<issn>` is the opposite convention: the **print** ISSN, falling back to
+electronic only for journals confirmed to have no print edition at all, and with no
+journal-name slug -- see `base_scraper.py`'s `issn_dir` property. It's organized by artifact
+type first (`raw_html/`, `json/`), then by `<issn>` within that. Each run overwrites the one
+current `data_scrapes/json/<issn>.json`; there's no dated history here (git history covers
+that if you need to diff a past run).
 
 ## The three-phase workflow
 
@@ -167,7 +180,7 @@ Before adding a new journal, also sanity-check the publisher's Terms of Use
    explaining what's there / what's missing.
 3. Run `python journal_scrapers/common/direct_fetch.py`.
 4. (Optional, not yet standard) Write a `scrape.py` like Nature's to extract
-   structured fields into `data_scrapes/<issn>_<slug>/latest.json`.
+   structured fields into `data_scrapes/json/<print-issn>.json`.
 
 **If it's blocked**: don't build automated workarounds. Check
 `docs/journal_access_survey.csv`'s notes for what's already known about that
@@ -176,13 +189,17 @@ Wiley, etc. -- so one finding often applies to several journals at once).
 
 ## Status
 
-- 4 journals have a full structured extraction: `1476-4687_nature` (bespoke
-  `scrape.py`, 7 article types, all journal-level fields resolved and cited
-  except Registered Reports' word/figure/reference limits), and
-  `1756-1833_bmj` / `1939-8980_annals-of-mathematics` /
-  `2571-581X_frontiers-sustainable-food-systems` (hand-transcribed
-  `extract.py`, built to test extraction approach/cost -- see the "Extract
-  structured fields" section above).
+- 4 journals have a full structured extraction, each named below by its
+  `journal_scrapers/<issn>_<slug>/` code folder (electronic ISSN) and its
+  `data_scrapes/json/<issn>.json` output (print ISSN, the opposite
+  convention -- see "Layout" above): `1476-4687_nature` / `json/0028-0836.json`
+  (bespoke `scrape.py`, 7 article types, all journal-level fields resolved
+  and cited except Registered Reports' word/figure/reference limits), and
+  `1756-1833_bmj` / `json/0959-8138.json`,
+  `1939-8980_annals-of-mathematics` / `json/0003-486X.json`,
+  `2571-581X_frontiers-sustainable-food-systems` / `json/2571-581X.json`
+  (hand-transcribed `extract.py`, built to test extraction approach/cost --
+  see the "Extract structured fields" section above).
 - 21 journals total have raw HTML/PDF fetched into `data_scrapes/` (see
   `direct_fetch.py`'s `TARGETS` and `docs/journal_access_survey.csv`) --
   structured extraction not yet built for the other 17.

@@ -34,12 +34,12 @@ from common.base_scraper import DATA_SCRAPES_DIR, USER_AGENT  # noqa: E402
 
 TARGETS = [
     {
-        "issn_slug": "1029-8479_jhep",
+        "issn": "1126-6708",
         "page_name": "submission-guidelines",
         "url": "https://link.springer.com/journal/13130/submission-guidelines",
     },
     {
-        "issn_slug": "2530-0644_perspectives-ecology-conservation",
+        "issn": "2530-0644",
         "page_name": "guia-autores",
         "url": "https://www.perspectecolconserv.com/en-guia-autores",
     },
@@ -70,7 +70,7 @@ def main() -> None:
             html = page.content()
             visible_text_len = len(page.inner_text("body"))
 
-            out_dir = DATA_SCRAPES_DIR / target["issn_slug"] / "raw_html"
+            out_dir = DATA_SCRAPES_DIR / "raw_html" / target["issn"]
             out_dir.mkdir(parents=True, exist_ok=True)
             out_path = out_dir / f"{target['page_name']}.rendered.html"
             out_path.write_text(html, encoding="utf-8")

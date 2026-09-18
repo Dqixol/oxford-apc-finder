@@ -14,9 +14,11 @@ itself. `pages` below lists every page actually verified (by reading it) to
 either contain real content or -- for a few math/physics journals -- confirm
 that the journal genuinely doesn't publish numeric limits at all.
 
-Output goes to data_scrapes/<issn>_<slug>/raw_html/<page-name>.html,
-matching the convention already used by journal_scrapers/1476-4687_nature/ --
-NOT a separate corpus folder.
+Output goes to data_scrapes/raw_html/<print-issn>/<page-name>.html -- the
+print ISSN alone, no journal-name slug, falling back to the electronic ISSN
+only for journals with no print edition at all. `slug` below is just this
+file's own human-readable label for each TARGETS entry (used in log output),
+not part of the output path.
 
 Run directly: `python journal_scrapers/common/direct_fetch.py`
 """
@@ -37,11 +39,13 @@ from common.robots import Robots  # noqa: E402
 # Perspectives in Ecology and Conservation, whose HTML is fetchable even
 # though the guide content itself needs JS rendering to extract -- see its note).
 #
-# issn is electronic where known (falls back to print), matching folder_slug
-# convention in base_scraper.py.
+# issn is the print ISSN, falling back to electronic only for journals
+# confirmed to have no print edition at all (checked against the ISSN Portal,
+# not assumed from publisher type) -- matching issn_dir's convention in
+# base_scraper.py.
 TARGETS = [
     {
-        "slug": "nature", "journal": "Nature", "issn": "1476-4687",
+        "slug": "nature", "journal": "Nature", "issn": "0028-0836",
         "pages": [
             {"name": "formatting-guide", "url": "https://www.nature.com/nature/for-authors/formatting-guide"},
         ],
@@ -51,7 +55,7 @@ TARGETS = [
                 "This entry just keeps the corpus consistent; nothing new needed here.",
     },
     {
-        "slug": "bmj", "journal": "The BMJ", "issn": "1756-1833",
+        "slug": "bmj", "journal": "The BMJ", "issn": "0959-8138",
         "pages": [
             {"name": "article-types", "url": "https://www.bmj.com/about-bmj/resources-authors/article-types"},
         ],
@@ -90,7 +94,7 @@ TARGETS = [
                 "journal-specific page; formatting/reference rules are on the platform-wide guidelines page.",
     },
     {
-        "slug": "annals-of-mathematics", "journal": "Annals of Mathematics", "issn": "1939-8980",
+        "slug": "annals-of-mathematics", "journal": "Annals of Mathematics", "issn": "0003-486X",
         "pages": [
             {"name": "submission-guidelines", "url": "https://annals.math.princeton.edu/submission-guidelines"},
         ],
@@ -99,7 +103,7 @@ TARGETS = [
                 "by reading, not assumed from length.",
     },
     {
-        "slug": "geometry-and-topology", "journal": "Geometry and Topology", "issn": "1364-0380",
+        "slug": "geometry-and-topology", "journal": "Geometry and Topology", "issn": "1465-3060",
         "pages": [
             {"name": "submissions", "url": "https://msp.org/gt/about/journal/submissions.html"},
         ],
@@ -108,7 +112,7 @@ TARGETS = [
                 "real and complete, just at the end of the document.",
     },
     {
-        "slug": "crelle", "journal": "Journal für die reine und angewandte Mathematik (Crelle)", "issn": "1435-5345",
+        "slug": "crelle", "journal": "Journal für die reine und angewandte Mathematik (Crelle)", "issn": "0075-4102",
         "pages": [
             {"name": "journal-home", "url": "https://www.degruyterbrill.com/journal/key/crll/html"},
         ],
@@ -120,13 +124,13 @@ TARGETS = [
                 "Crelle-specific, and isn't needed now that the real content is found.",
     },
     {
-        "slug": "mathematische-annalen", "journal": "Mathematische Annalen", "issn": "1432-1807",
+        "slug": "mathematische-annalen", "journal": "Mathematische Annalen", "issn": "0025-5831",
         "pages": [
             {"name": "submission-guidelines", "url": "https://link.springer.com/journal/208/submission-guidelines"},
         ],
     },
     {
-        "slug": "inventiones-mathematicae", "journal": "Inventiones Mathematicae", "issn": "1432-1297",
+        "slug": "inventiones-mathematicae", "journal": "Inventiones Mathematicae", "issn": "0020-9910",
         "pages": [
             {"name": "submission-guidelines", "url": "https://link.springer.com/journal/222/submission-guidelines"},
         ],
@@ -134,7 +138,7 @@ TARGETS = [
                 "word/page limit found, which is consistent with that template's usual pattern.",
     },
     {
-        "slug": "selecta-mathematica", "journal": "Selecta Mathematica", "issn": "1420-9020",
+        "slug": "selecta-mathematica", "journal": "Selecta Mathematica", "issn": "1022-1824",
         "pages": [
             {"name": "submission-guidelines", "url": "https://link.springer.com/journal/29/submission-guidelines"},
         ],
@@ -142,7 +146,7 @@ TARGETS = [
                 "reading, not just length). Only numeric rule found: running head <=50 characters.",
     },
     {
-        "slug": "duke-mathematical-journal", "journal": "Duke Mathematical Journal", "issn": "1547-7398",
+        "slug": "duke-mathematical-journal", "journal": "Duke Mathematical Journal", "issn": "0012-7094",
         "pages": [
             {"name": "for-authors", "url": "https://www.dukeupress.edu/duke-mathematical-journal"},
         ],
@@ -155,7 +159,7 @@ TARGETS = [
                 "challenge on first attempt (succeeded on retry) -- dukeupress.edu was reliable and used instead.",
     },
     {
-        "slug": "jhep", "journal": "Journal of High Energy Physics", "issn": "1029-8479",
+        "slug": "jhep", "journal": "Journal of High Energy Physics", "issn": "1126-6708",
         "pages": [
             {"name": "submission-guidelines", "url": "https://link.springer.com/journal/13130/submission-guidelines"},
             {"name": "author-help", "url": "https://jhep.sissa.it/jhep/help/helpLoader.jsp?pgType=author"},
@@ -199,7 +203,7 @@ TARGETS = [
                 "here are supplementary-file limits (10MB video, 30-char titles, 150MB combined), not article length.",
     },
     {
-        "slug": "jphysg", "journal": "Journal of Physics G-Nuclear and Particle Physics", "issn": "1361-6471",
+        "slug": "jphysg", "journal": "Journal of Physics G-Nuclear and Particle Physics", "issn": "0954-3899",
         "pages": [
             {"name": "about", "url": "https://publishingsupport.iopscience.iop.org/journals/journal-of-physics-g-nuclear-and-particle-physics/"},
         ],
@@ -281,9 +285,9 @@ def main() -> None:
     last_domain = None
     total_ok = total_pages = 0
     for target in TARGETS:
-        slug = f"{target['issn']}_{target['slug']}"
-        out_dir = DATA_SCRAPES_DIR / slug / "raw_html"
-        print(f"\n=== {target['journal']} ({slug}) ===")
+        issn_dir = target["issn"]
+        out_dir = DATA_SCRAPES_DIR / "raw_html" / issn_dir
+        print(f"\n=== {target['journal']} ({issn_dir}) ===")
         if target.get("note"):
             print(f"  note: {target['note']}")
 
@@ -314,7 +318,7 @@ def main() -> None:
                   f"{'' if result['ok'] else result.get('reason', '')}")
 
     print(f"\n{total_ok}/{total_pages} pages fetched successfully across {len(TARGETS)} journals.")
-    print(f"Output: {DATA_SCRAPES_DIR}/<issn>_<slug>/raw_html/")
+    print(f"Output: {DATA_SCRAPES_DIR}/raw_html/<issn>/")
 
 
 if __name__ == "__main__":

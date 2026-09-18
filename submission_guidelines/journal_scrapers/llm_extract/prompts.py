@@ -72,7 +72,7 @@ Authors whose papers are accepted for publication in the Annals of Mathematics m
 Authors of accepted papers will receive 10 offprints and a copy of published issue. Extra offprints may be purchased through the editorial office.
 """
 
-# The real, verified output for the text above -- see data_scrapes/1939-8980_annals-of-mathematics/latest.json
+# The real, verified output for the text above -- see data_scrapes/json/0003-486X.json
 FEW_SHOT_OUTPUT = {
     "journal": "Annals of Mathematics",
     "publisher": "Princeton University (self-published)",

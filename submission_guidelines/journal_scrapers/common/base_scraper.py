@@ -3,13 +3,20 @@
 Each journal gets its own subclass under journal_scrapers/<issn>_<slug>/scrape.py
 implementing `scrape()`, since page structure differs too much per publisher to
 share a parser. This base class only handles what's common: compliance,
-fetching, and writing the JSON + raw HTML to data_scrapes/.
+fetching, and writing raw HTML + the structured JSON to data_scrapes/.
+
+Naming convention: `issn_dir` (the print ISSN, falling back to electronic only
+for journals with no print edition) names data_scrapes/raw_html/<issn_dir>/
+for fetched pages, and data_scrapes/json/<issn_dir>.json for the one current
+structured record -- data_scrapes/ is organized by artifact type first
+(raw_html/, json/), then by issn_dir within that, with no journal-name slug
+in either path, and no dated history snapshots (each run overwrites the
+single current file).
 """
 from __future__ import annotations
 
 import json
 from abc import ABC, abstractmethod
-from datetime import date
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -27,6 +34,7 @@ USER_AGENT = (
 )
 
 DATA_SCRAPES_DIR = Path(__file__).resolve().parents[2] / "data_scrapes"
+JSON_DIR = DATA_SCRAPES_DIR / "json"
 
 
 class RobotsDisallowedError(RuntimeError):
@@ -45,10 +53,14 @@ class BaseJournalScraper(ABC):
         self._robots_cache: dict[str, Robots] = {}
 
     @property
-    def folder_slug(self) -> str:
-        issn = self.issn_electronic or self.issn_print
-        slug = self.journal.lower().replace(" ", "-")
-        return f"{issn}_{slug}" if issn else slug
+    def issn_dir(self) -> str:
+        """The print ISSN, or the electronic one if the journal genuinely has no print
+        edition -- this alone (no journal-name slug) names both the journal's
+        data_scrapes/<issn>/ folder and its data_scrapes/json/<issn>.json file."""
+        issn = self.issn_print or self.issn_electronic
+        if not issn:
+            raise ValueError(f"{self.journal!r} scraper has neither issn_print nor issn_electronic set")
+        return issn
 
     def robots_txt_url(self, url: str) -> str:
         parsed = urlparse(url)
@@ -80,16 +92,14 @@ class BaseJournalScraper(ABC):
         """Fetch and parse whatever pages are needed; return a populated JournalRecord."""
 
     def save_raw_html(self, name: str, html: str) -> None:
-        raw_dir = DATA_SCRAPES_DIR / self.folder_slug / "raw_html"
+        raw_dir = DATA_SCRAPES_DIR / "raw_html" / self.issn_dir
         raw_dir.mkdir(parents=True, exist_ok=True)
         (raw_dir / f"{name}.html").write_text(html, encoding="utf-8")
 
     def run(self) -> Path:
         record = self.scrape()
-        out_dir = DATA_SCRAPES_DIR / self.folder_slug
-        out_dir.mkdir(parents=True, exist_ok=True)
-        today = date.today().isoformat()
+        JSON_DIR.mkdir(parents=True, exist_ok=True)
         payload = json.dumps(record.to_dict(), indent=2, ensure_ascii=False)
-        (out_dir / f"{today}.json").write_text(payload, encoding="utf-8")
-        (out_dir / "latest.json").write_text(payload, encoding="utf-8")
-        return out_dir / f"{today}.json"
+        out_path = JSON_DIR / f"{self.issn_dir}.json"
+        out_path.write_text(payload, encoding="utf-8")
+        return out_path

@@ -101,6 +101,22 @@ def inline(schema: dict) -> dict:
     return root
 
 
+def as_response_format(schema: dict, name: str = "journal_record") -> dict:
+    """Wraps a JSON Schema in the shape vLLM's OpenAI-compatible server
+    actually expects for structured output on this cluster's installed
+    version (0.25.1, confirmed by reading
+    envs/vllm-env/lib/python3.11/site-packages/vllm/entrypoints/openai/chat_completion/protocol.py
+    directly) -- `guided_json` as a bare `extra_body` key was the older
+    vLLM convention client.py originally targeted; that param doesn't exist
+    in the installed version at all, so a call using it 400s. `strict` is
+    deliberately omitted (not set to True): OpenAI's own API requires every
+    property be listed in `required` under strict mode, which this schema
+    doesn't do (most JournalRecord/ArticleType fields are optional, by
+    design -- see schema.py's docstring), and vLLM's guided-decoding
+    backend doesn't need that invariant to use the schema as a constraint."""
+    return {"type": "json_schema", "json_schema": {"name": name, "schema": schema}}
+
+
 if __name__ == "__main__":
     import json
 

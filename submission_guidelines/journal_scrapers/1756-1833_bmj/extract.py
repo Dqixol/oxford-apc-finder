@@ -37,7 +37,8 @@ from common.schema import (  # noqa: E402
 )
 
 SOURCE_URL = "https://www.bmj.com/about-bmj/resources-authors/article-types"
-DATA_DIR = Path(__file__).resolve().parents[2] / "data_scrapes" / "1756-1833_bmj"
+ISSN_PRINT = "0959-8138"
+JSON_DIR = Path(__file__).resolve().parents[2] / "data_scrapes" / "json"
 
 REQUIRED_STATEMENTS_ALL = [
     "Title page and authorship (ICMJE criteria)",
@@ -207,12 +208,11 @@ def build() -> JournalRecord:
 
 def main() -> None:
     record = build()
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    JSON_DIR.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(record.to_dict(), indent=2, ensure_ascii=False)
-    today = date.today().isoformat()
-    (DATA_DIR / f"{today}.json").write_text(payload, encoding="utf-8")
-    (DATA_DIR / "latest.json").write_text(payload, encoding="utf-8")
-    print(f"Wrote {DATA_DIR / f'{today}.json'} -- {len(record.article_types)} article types")
+    out_path = JSON_DIR / f"{ISSN_PRINT}.json"
+    out_path.write_text(payload, encoding="utf-8")
+    print(f"Wrote {out_path} -- {len(record.article_types)} article types")
 
 
 if __name__ == "__main__":

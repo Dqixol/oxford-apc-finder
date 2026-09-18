@@ -34,7 +34,8 @@ from common.schema import (  # noqa: E402
 
 ARTICLE_TYPES_URL = "https://www.frontiersin.org/journals/sustainable-food-systems/for-authors/article-types"
 GUIDELINES_URL = "https://www.frontiersin.org/guidelines/author-guidelines"
-DATA_DIR = Path(__file__).resolve().parents[2] / "data_scrapes" / "2571-581X_frontiers-sustainable-food-systems"
+ISSN_ELECTRONIC = "2571-581X"  # no print edition -- Frontiers journals are electronic-only
+JSON_DIR = Path(__file__).resolve().parents[2] / "data_scrapes" / "json"
 
 
 def _wl(words: int) -> WordLimit:
@@ -184,12 +185,11 @@ def build() -> JournalRecord:
 
 def main() -> None:
     record = build()
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    JSON_DIR.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(record.to_dict(), indent=2, ensure_ascii=False)
-    today = date.today().isoformat()
-    (DATA_DIR / f"{today}.json").write_text(payload, encoding="utf-8")
-    (DATA_DIR / "latest.json").write_text(payload, encoding="utf-8")
-    print(f"Wrote {DATA_DIR / f'{today}.json'} -- {len(record.article_types)} article types")
+    out_path = JSON_DIR / f"{ISSN_ELECTRONIC}.json"
+    out_path.write_text(payload, encoding="utf-8")
+    print(f"Wrote {out_path} -- {len(record.article_types)} article types")
 
 
 if __name__ == "__main__":

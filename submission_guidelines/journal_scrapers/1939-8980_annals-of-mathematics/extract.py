@@ -28,7 +28,8 @@ from common.schema import (  # noqa: E402
 )
 
 SOURCE_URL = "https://annals.math.princeton.edu/submission-guidelines"
-DATA_DIR = Path(__file__).resolve().parents[2] / "data_scrapes" / "1939-8980_annals-of-mathematics"
+ISSN_PRINT = "0003-486X"
+JSON_DIR = Path(__file__).resolve().parents[2] / "data_scrapes" / "json"
 
 
 def build() -> JournalRecord:
@@ -95,12 +96,11 @@ def build() -> JournalRecord:
 
 def main() -> None:
     record = build()
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    JSON_DIR.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(record.to_dict(), indent=2, ensure_ascii=False)
-    today = date.today().isoformat()
-    (DATA_DIR / f"{today}.json").write_text(payload, encoding="utf-8")
-    (DATA_DIR / "latest.json").write_text(payload, encoding="utf-8")
-    print(f"Wrote {DATA_DIR / f'{today}.json'}")
+    out_path = JSON_DIR / f"{ISSN_PRINT}.json"
+    out_path.write_text(payload, encoding="utf-8")
+    print(f"Wrote {out_path}")
 
 
 if __name__ == "__main__":
