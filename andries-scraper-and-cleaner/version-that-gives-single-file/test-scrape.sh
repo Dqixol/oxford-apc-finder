@@ -7,8 +7,8 @@ cd "$SCRIPT_DIR"
 source venv/bin/activate
 
 # Step 1: remove the old files
-rm ./data/raw-html.json
-rm ./data/markdown.json
+rm -rf ./data
+mkdir ./data
 
 # Step 2: Scrape the HTML
 python scraper.py > data/raw-html.json
