@@ -3,6 +3,66 @@
 What the site said, and when it changed. Generated automatically by
 `pipeline/changelog.py` on every refresh — newest entry first.
 
+## 2026-09-21
+
+- **47** journals added, **15** removed, **46** changed.
+
+### Price changes (35)
+
+- Ghana Medical Journal (0016-9560): — → 300 USD
+- Polimery (0032-2725): 700 → 800
+- Journal of Integrative Neuroscience (0219-6352): 2200 → 2800
+- Clinical and Experimental Obstetrics & Gynecology (0390-6663): 1500 → 2500
+- Spirituality Studies (1339-9578): — → 400 EUR
+- Reviews in Cardiovascular Medicine (1530-6550): 2200 → 3200
+- Journal of Baghdad College of Dentistry (1680-0087): 100000 → 500000
+- AKADEMIKA Jurnal Pemikiran Islam (1693-069X): — → 1500000 IDR
+- Colorectal Cancer (1758-194X): — → 1756 GBP
+- Jurnal Ilmu Lingkungan (1829-8907): — → 1000000 IDR
+- ULUL ALBAB Jurnal Studi Islam (1858-4349): — → 3500000 IDR
+- Women s Midlife Health (2054-2690): — → 2202 USD
+- Big Data Analytics (2058-6345): — → 1590 USD
+- Journal of Biomedical Physics and Engineering (2251-7200): 650 → 1000
+- Kuwait Journal of Science (2307-4108): — → 935 USD
+- Journal of Oral Health and Oral Epidemiology (2322-1372): — → 350 USD
+- Annals of Applied Sport Science (2322-4479): 1650 → 300
+- Journal of Information, Education, Science and Technology (2360-8846): 36 → —
+- Revista de Investigación e Innovación Agropecuaria y de Recursos Naturales (2409-1618): 15 → 50
+- Міжнародні відносини суспільні комунікації та регіональні студії (2522-1663): 1540 → 2200
+- Tefsir Araştırmaları Dergisi (2587-0882): 2500 → —
+- Journal of Pedagogical Research (2602-3717): — → 1500 EUR
+- Frontiers in Political Science (2673-3145): 1058 → 1346
+- Frontiers in Oral Health (2673-4842): 2295 → 2426
+- Frontiers in Neuroergonomics (2673-6195): 1755 → 1976
+- passer (2706-5944): 150000 → 250000
+- Interdisciplinary Journal of Education Research (2710-2114): 577 → 650
+- Interdisciplinary Journal of Rural and Community Studies (2710-2572): 577 → 650
+- Journal of Modern Processes in Manufacturing and Production (2717-0314): 3500000 → 10000000
+- Circular Economy (2752-163X): 380 → 640
+- Frontiers in Bioscience-Landmark (2768-6698): 2500 → 3000
+- Interdisciplinary Journal of Sociality Studies (2789-5661): 577 → 650
+- Frontiers in Child and Adolescent Psychiatry (2813-4540): 1755 → 1976
+- Frontiers in Language Sciences (2813-4605): 1755 → 1976
+- Interdisciplinary journal of management sciences. (3007-5297): 577 → 650
+
+### Removed (15)
+
+- Kahramanmaraş Sütçü İmam Üniversitesi Tıp Fakültesi Dergisi (1303-6610)
+- Motif Akademi Halk Bilimi Dergisi (1308-4445)
+- LITERA (1412-2596)
+- Jurnal Ilmiah Manajemen dan Bisnis (1693-7619)
+- Eksis Jurnal Riset Ekonomi dan Bisnis (1907-7513)
+- Malaysian Family Physician (1985-207X)
+- Journal of Advanced Manufacturing Technology (JAMT) (1985-3157)
+- Journal of Tourism, Hospitality and Culinary Arts (1985-8914)
+- The Indonesian Biomedical Journal (2085-3297)
+- Advanced Electromagnetics (2119-0275)
+- Jurnal Pendidikan Ekonomi Dan Bisnis (JPEB) (2302-2663)
+- Molecular and Cellular Biomedical Sciences (2527-3442)
+- Journal of Applied Taxation and Policy (3090-7314)
+- Teladan Jurnal Pendidikan Umum dan Karakter (3109-2128)
+- Journal of Applied Artificial Intelligence in Education (3109-7081)
+
 ## 2026-09-14
 
 - **37** journals added, **10** removed, **1925** changed.
