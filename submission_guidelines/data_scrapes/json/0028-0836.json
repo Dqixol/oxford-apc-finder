@@ -5,49 +5,12 @@
     "print": "0028-0836",
     "electronic": "1476-4687"
   },
-  "url": "https://www.nature.com/nature/for-authors",
-  "date_scraped": "2026-09-17",
-  "robots_txt_allowed": {
-    "value": true,
-    "source_url": "https://www.nature.com/robots.txt",
-    "notes": "The generic User-agent: * group allows these author-guideline pages, but robots.txt explicitly disallows several named AI-crawler user agents (including anthropic-ai, ClaudeBot, GPTBot) site-wide. This scraper identifies as its own named bot, not as a browser or an AI-crawler UA."
-  },
-  "peer_review_model": {
-    "value": [
-      "single-anonymized",
-      "double-anonymized"
-    ],
-    "source_url": "https://www.nature.com/nature-research/editorial-policies/peer-review",
-    "notes": "single-anonymized is the default; We do not release referees' identities to authors or to other reviewers unless a referee voluntarily signs their comments to the authors. Some Nature-branded journals and Communications journals offer a double-anonymized peer review option. Please visit the journal website for information on the peer review options available."
-  },
-  "preprint_policy": {
-    "value": "Nature Portfolio journals encourage posting of preprints of primary research manuscripts on preprint servers of the authors’ choice, authors’ or institutional websites, and open communications between researchers whether on community preprint servers or preprint commenting platforms.",
-    "source_url": "https://www.nature.com/nature-portfolio/editorial-policies/preprints-conference-proceedings",
-    "notes": null
-  },
-  "ai_use_policy": {
-    "value": "Springer Nature supports the responsible and transparent use of artificial intelligence where it strengthens research quality, upholds editorial independence, and preserves the integrity of the scientific and scholarly record. AI is treated as a supporting technology. Scholarly judgement, accountability, and responsibility always remain human.",
-    "source_url": "https://www.nature.com/nature-portfolio/editorial-policies/ai",
-    "notes": null
-  },
-  "latex_accepted": {
-    "value": true,
-    "source_url": "https://www.nature.com/nature/for-authors/formatting-guide",
-    "notes": "TeX/LaTeX: If you have prepared your paper using TeX/LaTeX, we will need to convert this to Word after acceptance, before your paper can be typeset. All textual material of the paper (including references, tables, figure captions, online methods, etc.) should be included as a single .tex file."
-  },
-  "template_provided": {
-    "value": false,
-    "source_url": "https://www.nature.com/nature/for-authors/formatting-guide",
-    "notes": "No general manuscript template. Nature provides a subject-specific ChemDraw template for chemical structures (http://www.nature.com/documents/nr-chemdraw-stylesheet.cds) and an annotated example of the summary paragraph (https://www.nature.com/documents/nature-summary-paragraph.pdf), but neither is a full manuscript template."
-  },
-  "template_url": null,
-  "languages_accepted": [
-    "English"
-  ],
+  "LLM": true,
+  "validated": false,
+  "date_scraped": "2026-09-23",
   "article_types": [
     {
       "type": "Article",
-      "source_url": "https://www.nature.com/nature/for-authors/formatting-guide",
       "description": "Articles are original reports whose conclusions represent a substantial advance in understanding of an important problem and have immediate, far-reaching implications.",
       "total_word_limit": {
         "min": 2500,
@@ -61,132 +24,49 @@
         ],
         "notes": "Range reflects discipline, not a distinct article type: ~2,500 words for a 6-page article; ~4300 words for a 8-page article (physical sciences typically 6 pages, biological/clinical/social sciences typically 8)."
       },
-      "required_sections": [
-        "Titles",
-        "Text",
-        "Methods",
-        "References",
-        "End notes",
-        "Life sciences and behavioural & social sciences reporting guidelines",
-        "Tables",
-        "Figure legends",
-        "Figures",
-        "Production-quality figures",
-        "Extended Data",
-        "Supplementary Information",
-        "Chemical structures and characterization of chemical materials"
-      ],
-      "section_word_limits": [
-        {
-          "section": "Summary paragraph",
-          "limit": 200,
-          "notes": "ideally no more than this many words"
-        },
-        {
-          "section": "Methods",
-          "limit": 3000,
-          "notes": "typical guideline, not a hard cap"
-        },
-        {
-          "section": "Figure legends",
-          "limit": 300,
-          "notes": "per legend"
-        }
-      ],
-      "figure_limits": [
-        {
-          "min": 4,
-          "max": 6,
-          "counts": "figures and tables combined",
-          "notes": "A 'modest' item occupies about a quarter of a page; 4 for a 6-page article, 5-6 for an 8-page article."
-        }
-      ],
-      "reference_limit": {
-        "min": null,
-        "max": 50,
-        "notes": null
-      },
-      "reference_style": "References are each numbered, ordered sequentially as they appear in the text, tables, boxes, figure legends, Methods, Extended Data tables and Extended Data figure legends. When cited in the text, reference numbers are superscript, not in brackets unless they are likely to be confused with a superscript number.",
-      "author_limit": null,
-      "required_statements": [
-        "separate data and code availability statements",
-        "funding statement",
-        "author contributions",
-        "competing interest declaration"
-      ],
-      "notes": "Word/figure/reference limits are editorial guidelines, not hard caps; final length is at the editor's discretion."
+      "structure": "Titles, Text, Methods (typically no more than 3000 words (guideline, not a hard cap)), References, End notes, Life sciences and behavioural & social sciences reporting guidelines, Tables, Figure legends (fewer than 300 words each), Figures, Production-quality figures, Extended Data, Supplementary Information, Chemical structures and characterization of chemical materials, Summary paragraph (ideally no more than 200 words)",
+      "figures_tables": "4-6 modest display items (figures and tables combined). A 'modest' item occupies about a quarter of a page; 4 for a 6-page article, 5-6 for an 8-page article.",
+      "source_urls": [
+        "https://www.nature.com/nature/for-authors/formatting-guide"
+      ]
     },
     {
       "type": "Correspondence",
-      "source_url": "https://www.nature.com/nature/for-authors/other-subs",
       "description": "Brief comments on topical Nature content (Editorials, World View, News, News Features, Books & Arts reviews, Comment pieces or Correspondence) -- not technical comments on peer-reviewed research papers (those go to Matters Arising instead).",
       "total_word_limit": {
         "min": null,
         "max": 200,
         "unit": "words",
         "excludes": [],
-        "notes": "Hard ceiling, not a target."
+        "notes": "Source states 'less than 200 words' -- hard ceiling, not a target."
       },
-      "required_sections": [],
-      "section_word_limits": [],
-      "figure_limits": [],
-      "reference_limit": {
-        "min": null,
-        "max": 2,
-        "notes": null
-      },
-      "reference_style": "With links to citations; further citations allowed for fact-checking only.",
-      "author_limit": {
-        "min": null,
-        "max": 4,
-        "notes": "Collective/consortium authorship not permitted."
-      },
-      "required_statements": [],
-      "notes": "Supplementary material is not permitted."
+      "structure": null,
+      "figures_tables": null,
+      "source_urls": [
+        "https://www.nature.com/nature/for-authors/other-subs"
+      ]
     },
     {
       "type": "Matters Arising",
-      "source_url": "https://www.nature.com/nature/for-authors/matters-arising",
       "description": "Post-publication technical comments on a Nature research paper published within the past 18 months, plus the author's Reply.",
       "total_word_limit": {
         "min": null,
         "max": 1200,
         "unit": "words",
         "excludes": [
-          "methods (may be moved to Supplementary Information)"
+          "Methods"
         ],
-        "notes": "Target, not a hard cap ('ideally')."
+        "notes": "Ideally not exceed 1200 words (target, not a hard cap; Methods may be moved to Supplementary Information, hence the exclusion)."
       },
-      "required_sections": [
-        "Summary paragraph (used as the abstract)",
-        "Main text",
-        "Methods (may be moved to Supplementary Information)"
-      ],
-      "section_word_limits": [],
-      "figure_limits": [
-        {
-          "min": null,
-          "max": null,
-          "counts": "figures and tables combined",
-          "notes": "Ideally only one or two small figures or tables (stated as words, not a fixed digit, on the source page); complex ones may go into Extended Data instead (ideally no more than three such items)."
-        }
-      ],
-      "reference_limit": {
-        "min": null,
-        "max": 15,
-        "notes": null
-      },
-      "reference_style": "Same reference style as Articles.",
-      "author_limit": null,
-      "required_statements": [
-        "Competing interests statement"
-      ],
-      "notes": null
+      "structure": "Summary paragraph (used as the abstract), Main text, Methods (may be moved to Supplementary Information)",
+      "figures_tables": "Ideally only one or two small figures or tables; complex ones may go into Extended Data instead (ideally no more than three such items).",
+      "source_urls": [
+        "https://www.nature.com/nature/for-authors/matters-arising"
+      ]
     },
     {
       "type": "Review",
-      "source_url": "https://www.nature.com/nature/for-authors/other-subs",
-      "description": "Focuses on one topical aspect of a field; should not focus on the author's own work.",
+      "description": "Focuses on one topical aspect of a field; should not focus on the author's own work. Most articles are commissioned, but authors wishing to submit an unsolicited Review or Perspective must do so through the online submission system via a synopsis.",
       "total_word_limit": {
         "min": null,
         "max": null,
@@ -194,21 +74,15 @@
         "excludes": [],
         "notes": "No fixed word/figure/reference limit is published -- length is agreed with the commissioning editor once the synopsis is accepted. This is a confirmed 'no published number', not a gap in scraping."
       },
-      "required_sections": [
-        "Synopsis (basic structure, material to be covered, proposed depth/arrangement)"
-      ],
-      "section_word_limits": [],
-      "figure_limits": [],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": "Most articles are commissioned, but authors wishing to submit an unsolicited Review or Perspective must do so through the online submission system via a synopsis."
+      "structure": "Synopsis (basic structure, material to be covered, proposed depth/arrangement)",
+      "figures_tables": null,
+      "source_urls": [
+        "https://www.nature.com/nature/for-authors/other-subs"
+      ]
     },
     {
       "type": "Perspective",
-      "source_url": "https://www.nature.com/nature/for-authors/other-subs",
-      "description": "Follows the same formatting guidelines as Reviews; more forward-looking/speculative and may be opinionated but balanced.",
+      "description": "Follows the same formatting guidelines as Reviews; more forward-looking/speculative and may be opinionated but balanced. Most articles are commissioned, but authors wishing to submit an unsolicited Review or Perspective must do so through the online submission system via a synopsis.",
       "total_word_limit": {
         "min": null,
         "max": null,
@@ -216,21 +90,15 @@
         "excludes": [],
         "notes": "No fixed word/figure/reference limit is published -- length is agreed with the commissioning editor once the synopsis is accepted. This is a confirmed 'no published number', not a gap in scraping."
       },
-      "required_sections": [
-        "Synopsis (basic structure, material to be covered, proposed depth/arrangement)"
-      ],
-      "section_word_limits": [],
-      "figure_limits": [],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": "Most articles are commissioned, but authors wishing to submit an unsolicited Review or Perspective must do so through the online submission system via a synopsis."
+      "structure": "Synopsis (basic structure, material to be covered, proposed depth/arrangement)",
+      "figures_tables": null,
+      "source_urls": [
+        "https://www.nature.com/nature/for-authors/other-subs"
+      ]
     },
     {
       "type": "Analysis",
-      "source_url": "https://www.nature.com/nature/for-authors/other-subs",
-      "description": "Peer-reviewed; presents a new analysis of existing data rather than original data. Published only occasionally.",
+      "description": "Peer-reviewed; presents a new analysis of existing data rather than original data. Published only occasionally. Submitted via synopsis through the online submission system, with 'Analysis:' inserted before the title.",
       "total_word_limit": {
         "min": null,
         "max": null,
@@ -238,38 +106,27 @@
         "excludes": [],
         "notes": "No fixed word limit published."
       },
-      "required_sections": [],
-      "section_word_limits": [],
-      "figure_limits": [],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": "Submitted via synopsis through the online submission system, with 'Analysis:' inserted before the title."
+      "structure": null,
+      "figures_tables": null,
+      "source_urls": [
+        "https://www.nature.com/nature/for-authors/other-subs"
+      ]
     },
     {
       "type": "Registered Reports",
-      "source_url": "https://www.nature.com/nature/for-authors/registered-reports",
       "description": "Two-stage process: Stage 1 protocol (introduction, hypotheses, methods, analysis plan) is peer reviewed and can earn in-principle acceptance before data collection; Stage 2 is the full manuscript with results and discussion added.",
-      "total_word_limit": null,
-      "required_sections": [
-        "Stage 1: Registered Report Protocol",
-        "Stage 2: Full manuscript"
-      ],
-      "section_word_limits": [],
-      "figure_limits": [],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": "The guidelines page doesn't state distinct word/figure/reference limits -- Stage 2 manuscripts likely follow the standard Article formatting guide, but that's not confirmed on this page."
+      "total_word_limit": {
+        "min": null,
+        "max": null,
+        "unit": "words",
+        "excludes": [],
+        "notes": "The guidelines page doesn't state distinct word/figure/reference limits -- Stage 2 manuscripts likely follow the standard Article formatting guide, but that's not confirmed on this page."
+      },
+      "structure": "Stage 1: Registered Report Protocol, Stage 2: Full manuscript",
+      "figures_tables": null,
+      "source_urls": [
+        "https://www.nature.com/nature/for-authors/registered-reports"
+      ]
     }
-  ],
-  "remarks": "Scope limited to research-submission types (excludes staff-written content: News, Careers, Obituaries, Books & Arts, Futures, News & Views, Technology Features, Outlooks, Comment and World View). Peer review model, preprint policy, and AI-use policy sourced from https://www.nature.com/nature-research/editorial-policies/peer-review, https://www.nature.com/nature-portfolio/editorial-policies/preprints-conference-proceedings, and https://www.nature.com/nature-portfolio/editorial-policies/ai respectively.",
-  "needs_review": [
-    "article_types[Registered Reports].total_word_limit",
-    "article_types[Registered Reports].figure_limits",
-    "article_types[Registered Reports].reference_limit"
-  ],
-  "source": "scraped"
+  ]
 }

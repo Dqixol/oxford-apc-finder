@@ -1,13 +1,12 @@
 """Flatten scraped journal JSON records into a single Excel workbook for easy review.
 
 Reads every data_scrapes/json/<issn>.json and writes one row per (journal,
-article type) to data_scrapes/journals_overview.xlsx. Nested fields
-(required sections, section word limits, figure limits, needs_review) are
-joined into single "; "-separated cells rather than spread across columns,
-since the number of article types/sections/figure-limit entries varies per
-journal. Any missing value is written as "NA" in the spreadsheet -- the
-underlying JSON keeps proper `null`/`[]` so downstream code can still tell
-"missing" apart from the literal string "NA".
+article type) to data_scrapes/journals_overview.xlsx. Source URLs are joined
+into a single "; "-separated cell rather than spread across columns, since
+the number of source pages per article type varies. Any missing value is
+written as "NA" in the spreadsheet -- the underlying JSON keeps proper
+`null`/`[]` so downstream code can still tell "missing" apart from the
+literal string "NA".
 
 Run directly: `python journal_scrapers/common/json_to_excel.py`
 """
@@ -25,27 +24,10 @@ OUTPUT_PATH = DATA_SCRAPES_DIR / "journals_overview.xlsx"
 NA = "NA"
 
 COLUMNS = [
-    "Journal", "Publisher", "ISSN (print)", "ISSN (electronic)",
-    "General URL (for-authors landing page)",
-    "Date scraped", "Source",
-    "Robots.txt allowed", "Robots.txt source", "Robots.txt notes",
-    "Peer review model", "Peer review model source", "Peer review model notes",
-    "Preprint policy", "Preprint policy source",
-    "AI use policy", "AI use policy source",
-    "LaTeX accepted", "LaTeX source", "LaTeX notes",
-    "Template provided", "Template provided source", "Template provided notes",
-    "Template URL (actual resource, if any)",
-    "Languages accepted",
-    "Article type", "Article type source", "Article type description",
-    "Total word limit (min)", "Total word limit (max)", "Total word limit (unit)",
-    "Total word limit (excludes)", "Total word limit (notes)",
-    "Required sections",
-    "Figure limits",
-    "Reference limit", "Reference style",
-    "Author limit",
-    "Required statements",
-    "Article type notes",
-    "Remarks", "Needs review",
+    "Journal", "Publisher", "ISSN (print)", "ISSN (electronic)", "LLM", "Validated", "Date scraped",
+    "Article type", "Total word limit (min)", "Total word limit (max)", "Total word limit (unit)",
+    "Total word limit (excludes)", "Total word limit (notes)", "Description",
+    "Structure", "Figures/tables", "Sources of info",
 ]
 
 
@@ -60,91 +42,14 @@ def _na(value):
     return value
 
 
-def _sourced(record: dict, key: str) -> tuple:
-    """A SourcedValue field ({value, source_url, notes}) -> (value, source_url, notes) tuple."""
-    d = record.get(key) or {}
-    return d.get("value"), d.get("source_url"), d.get("notes")
-
-
 def _join(items) -> str:
     return "; ".join(str(i) for i in items) if items else ""
-
-
-def _required_sections_str(article_type: dict) -> str:
-    """Sections list, with each section's word limit appended in brackets where known."""
-    sections = article_type.get("required_sections") or []
-    limits_by_section = {
-        e.get("section", "").lower(): e for e in (article_type.get("section_word_limits") or [])
-    }
-    parts = []
-    matched = set()
-    for section in sections:
-        entry = limits_by_section.get(section.lower())
-        if entry is None:
-            # loose match: section word limit's name appears inside the section heading, or vice versa
-            for key, e in limits_by_section.items():
-                if key and (key in section.lower() or section.lower() in key):
-                    entry = e
-                    matched.add(key)
-                    break
-        else:
-            matched.add(section.lower())
-        if entry and entry.get("limit"):
-            parts.append(f"{section} (≤{entry['limit']} words)")
-        else:
-            parts.append(section)
-    # section word limits that didn't match any required_sections entry -- append separately rather than drop
-    for key, e in limits_by_section.items():
-        if key not in matched and e.get("limit"):
-            parts.append(f"{e['section']} (≤{e['limit']} words)")
-    return "; ".join(parts)
-
-
-def _count_range_str(cr: dict | None) -> str:
-    """CountRange ({min, max, notes}) -> a plain range string, e.g. '12-20' or 'up to 50'."""
-    if not cr or (cr.get("min") is None and cr.get("max") is None):
-        return ""
-    lo, hi = cr.get("min"), cr.get("max")
-    if lo is not None and hi is not None and lo != hi:
-        range_str = f"{lo}-{hi}"
-    elif hi is not None:
-        range_str = f"up to {hi}" if lo is None else str(hi)
-    else:
-        range_str = f"at least {lo}"
-    return f"{range_str} ({cr['notes']})" if cr.get("notes") else range_str
-
-
-def _figure_limits_str(article_type: dict) -> str:
-    parts = []
-    for f in article_type.get("figure_limits") or []:
-        lo, hi, counts = f.get("min"), f.get("max"), f.get("counts") or "figures"
-        if lo is not None and hi is not None and lo != hi:
-            range_str = f"{lo}-{hi}"
-        elif hi is not None:
-            range_str = f"up to {hi}"
-        elif lo is not None:
-            range_str = f"at least {lo}"
-        else:
-            range_str = None
-        piece = f"{range_str} {counts}" if range_str else counts
-        if f.get("notes"):
-            piece += f" ({f['notes']})"
-        parts.append(piece)
-    return "; ".join(parts)
 
 
 def record_to_rows(record: dict) -> list[list]:
     """One row per article type; journal-level fields repeat across those rows."""
     issn = record.get("issn") or {}
     article_types = record.get("article_types") or [{}]
-
-    robots_v, robots_url, robots_notes = _sourced(record, "robots_txt_allowed")
-    peer_v, peer_url, peer_notes = _sourced(record, "peer_review_model")
-    preprint_v, preprint_url, _ = _sourced(record, "preprint_policy")
-    ai_v, ai_url, _ = _sourced(record, "ai_use_policy")
-    latex_v, latex_url, latex_notes = _sourced(record, "latex_accepted")
-    template_v, template_src_url, template_notes = _sourced(record, "template_provided")
-    peer_v = _join(peer_v) if isinstance(peer_v, list) else peer_v  # value is a category list, e.g. ["single-anonymized", "double-anonymized"]
 
     rows = []
     for at in article_types:
@@ -154,34 +59,19 @@ def record_to_rows(record: dict) -> list[list]:
             record.get("publisher"),
             issn.get("print"),
             issn.get("electronic"),
-            record.get("url"),
+            record.get("LLM"),
+            record.get("validated"),
             record.get("date_scraped"),
-            record.get("source"),
-            robots_v, robots_url, robots_notes,
-            peer_v, peer_url, peer_notes,
-            preprint_v, preprint_url,
-            ai_v, ai_url,
-            latex_v, latex_url, latex_notes,
-            template_v, template_src_url, template_notes,
-            record.get("template_url"),
-            _join(record.get("languages_accepted")),
             at.get("type"),
-            at.get("source_url"),
-            at.get("description"),
             word_limit.get("min"),
             word_limit.get("max"),
             word_limit.get("unit"),
             _join(word_limit.get("excludes")),
             word_limit.get("notes"),
-            _required_sections_str(at),
-            _figure_limits_str(at),
-            _count_range_str(at.get("reference_limit")),
-            at.get("reference_style"),
-            _count_range_str(at.get("author_limit")),
-            _join(at.get("required_statements")),
-            at.get("notes"),
-            record.get("remarks"),
-            _join(record.get("needs_review")),
+            at.get("description"),
+            at.get("structure"),
+            at.get("figures_tables"),
+            _join(at.get("source_urls")),
         ]])
     return rows
 

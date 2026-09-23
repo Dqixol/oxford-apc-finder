@@ -1,64 +1,38 @@
 """Canonical output schema shared by every journal scraper.
 
-Design note: word limits, required sections, figure limits, reference limits
-and reference style usually vary *by article type* within a journal (Research
-Article vs Review vs Letter, etc.), not just by journal. That's why those
-fields live on ArticleType rather than on JournalRecord directly.
+As of 2026-09-23 this schema is deliberately short: exploratory work with a
+much larger schema (peer-review model, preprint/AI-use policy, LaTeX/template
+fields, structured reference/author/figure count ranges, etc.) showed it was
+more than the project actually needs. This version keeps only what's needed
+to answer, per journal and per article type: what are you submitting, how
+long can it be, what does it need to contain, and where did that come from.
 
-Numeric limits (word counts, figure/table counts, reference counts, author
-counts) are stored as min/max ranges rather than a single value, because
-sources often give a range (e.g. "2,500-4,300 words depending on discipline",
-"12-20 references") rather than one number. When a source gives a single
-fixed number, set min == max. When a source gives no number at all -- either
-because it genuinely doesn't publish one (e.g. a commissioned Review with
-editor-negotiated length) or because we haven't checked yet -- leave min/max
-as None and explain which case it is in `notes`.
+Word limits are a structured `WordLimit` (min/max/unit/excludes/notes) so
+downstream code can filter/aggregate numerically across journals. Numeric
+limits are stored as min/max ranges rather than a single value, because
+sources often give a range (e.g. "2,500-4,300 words") rather than one
+number. When a source gives a single fixed number, set min == max. When a
+source gives no number at all -- either because it genuinely doesn't
+publish one, or because it hasn't been checked -- leave min/max as None and
+explain which case it is in `notes`.
 
-Structure vs. free text: only fields we actually want to compare/filter/
-aggregate across journals are structured (word/figure/reference/author
-counts, peer-review category, LaTeX/template booleans). Everything else --
-figure DPI, file size limits, LaTeX class/margin specifics, and any nuance
-that doesn't reduce to a clean category or number -- stays in a `notes`
-field rather than getting its own dedicated field. Trying to model every
-possible constraint type doesn't scale past a handful of journals; free text
-is the honest answer for the long tail. Every structured field that can fail
-to reduce cleanly carries a `notes` companion for exactly that reason (see
-WordLimit, FigureLimit, CountRange, SourcedValue below). A qualitative limit
-that never reduces to a real number (e.g. "1-2 small figures or tables") is
-not a min/max to guess at -- leave min/max None and put the whole qualitative
-description in `notes` verbatim; don't force a fake number into min/max just
-to fill the field.
+Figure/table guidance stays a free-text string (`figures_tables`) rather
+than a structured count: unlike word limits, it isn't something the project
+currently needs to filter/aggregate on, and sources state it in too many
+different shapes (a count, "modest" qualitative language, per-item-type
+splits) to force into one structure without inventing detail the source
+doesn't have.
 
-Provenance: a journal's author-guidance is usually spread across several
-pages (formatting guide, editorial-policy pages, robots.txt...), so a single
-`JournalRecord.url` can't honestly be "the" source for every field. Any field
-whose value was read from a page *other than* `JournalRecord.url` is wrapped
-in `SourcedValue`, carrying its own `source_url` so it can be traced back to
-exactly where it came from. `ArticleType.source_url` covers the whole
-article-type entry instead of wrapping each of its fields individually,
-since in practice one page fully describes one article type; if a future
-journal splits an article type's rules across multiple pages, that's the
-point to start wrapping individual ArticleType fields too.
+Provenance: source_urls lives on ArticleType (not JournalRecord) because a
+journal's author-guidance is usually spread across several pages, and in
+practice one page (or a small set of pages) fully describes one article
+type's rules. If a field needs its own separate citation, put that citation
+inline in the field's text rather than adding structure back.
 """
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
-from typing import Any, Optional
-
-# Soft, documented vocabularies -- not runtime-enforced (dataclasses don't
-# validate), but the point of a fixed list is that `value` holds a real
-# category, not a sentence. If a journal's actual policy doesn't fit one of
-# these cleanly, that's what `notes` is for -- don't invent a new one-off
-# string in `value` (see schema.py history: peer_review_model.value used to
-# hold a full sentence for Nature, defeating the point of the field).
-PEER_REVIEW_MODELS = ("single-anonymized", "double-anonymized", "open", "transparent", "none", "other")
-
-
-@dataclass
-class SourcedValue:
-    value: Optional[Any] = None
-    source_url: Optional[str] = None
-    notes: Optional[str] = None
+from typing import Optional
 
 
 @dataclass
@@ -77,43 +51,16 @@ class WordLimit:
 
 
 @dataclass
-class SectionWordLimit:
-    section: str
-    limit: Optional[int] = None
-    notes: Optional[str] = None
-
-
-@dataclass
-class FigureLimit:
-    min: Optional[int] = None
-    max: Optional[int] = None
-    counts: str = "figures"  # what min/max is counting, e.g. "figures", "tables", "figures and tables combined"
-    notes: Optional[str] = None  # DPI, file size, format, colour fees, anything else that isn't a count -- see module docstring
-
-
-@dataclass
-class CountRange:
-    """A plain min/max count with no unit -- for references, authors, anything
-    that's just counted rather than measured. See WordLimit if a unit matters."""
-    min: Optional[int] = None
-    max: Optional[int] = None
-    notes: Optional[str] = None
-
-
-@dataclass
 class ArticleType:
     type: str
-    source_url: Optional[str] = None
-    description: Optional[str] = None  # what this article type is/for, e.g. "post-publication technical comments on a paper published within 18 months" -- not every journal states this, leave None rather than guess
+    description: Optional[str] = None  # what this article type is/for -- not every journal states this, leave None rather than guess
     total_word_limit: Optional[WordLimit] = None
-    required_sections: list[str] = field(default_factory=list)
-    section_word_limits: list[SectionWordLimit] = field(default_factory=list)
-    figure_limits: list[FigureLimit] = field(default_factory=list)
-    reference_limit: Optional[CountRange] = None
-    reference_style: Optional[str] = None
-    author_limit: Optional[CountRange] = None
-    required_statements: list[str] = field(default_factory=list)  # e.g. ["competing interests", "data availability", "ethics approval"]
-    notes: Optional[str] = None  # caveats about the rules above (e.g. "guidelines, not hard caps") -- NOT what the type is, see `description`
+    structure: Optional[str] = None  # required/typical sections, with sub word counts inline where the source gives them, e.g. "Abstract (250 words), Introduction, Methods, Results, Discussion"
+    figures_tables: Optional[str] = None  # free text guidance on number of figures/tables, e.g. "typically no more than 6 figures/tables combined"
+    source_urls: list[str] = field(default_factory=list)  # every page this entry's fields were read from
+
+    def to_dict(self) -> dict:
+        return asdict(self)
 
 
 @dataclass
@@ -121,20 +68,10 @@ class JournalRecord:
     journal: str
     publisher: Optional[str]
     issn: ISSN
-    url: str  # general "for authors" landing page -- not necessarily the source of any individual field below
+    LLM: bool  # True if this record's values were produced by an LLM (agent-assisted "frozen transcript" or an automated vLLM pipeline), False if fully manual
+    validated: bool  # True once an independent human has reviewed/confirmed the record's values
     date_scraped: str
-    robots_txt_allowed: Optional[SourcedValue] = None  # source_url is the domain's /robots.txt
-    peer_review_model: Optional[SourcedValue] = None  # value: list[str], each a member of PEER_REVIEW_MODELS -- a journal can offer more than one (e.g. single by default, double optional); notes says which is default and under what conditions
-    preprint_policy: Optional[SourcedValue] = None
-    ai_use_policy: Optional[SourcedValue] = None
-    latex_accepted: Optional[SourcedValue] = None
-    template_provided: Optional[SourcedValue] = None
-    template_url: Optional[str] = None  # the actual template file/resource, when one exists -- not a citation
-    languages_accepted: list[str] = field(default_factory=list)  # e.g. ["English", "French", "German"]; empty means not stated/checked, not "English only"
     article_types: list[ArticleType] = field(default_factory=list)
-    remarks: Optional[str] = None
-    needs_review: list[str] = field(default_factory=list)  # field names not yet confirmed one way or the other
-    source: str = "scraped"  # scraped | manual | mixed
 
     def to_dict(self) -> dict:
         return asdict(self)

@@ -69,9 +69,21 @@ TARGETS = [
             {"name": "submission-guidelines", "url": "https://www.nature.com/natsustain/submission-guidelines"},
             {"name": "initial-formatting", "url": "https://www.nature.com/natsustain/submission-guidelines/initial-formatting"},
             {"name": "aip-and-formatting", "url": "https://www.nature.com/natsustain/submission-guidelines/aip-and-formatting"},
+            {"name": "content", "url": "https://www.nature.com/natsustain/content"},
+            {"name": "peer-review-policy", "url": "https://www.nature.com/natsustain/editorial-policies/peer-review"},
+            {"name": "preprint-policy", "url": "https://www.nature.com/natsustain/editorial-policies/preprints-conference-proceedings"},
+            {"name": "ai-policy", "url": "https://www.nature.com/natsustain/editorial-policies/ai"},
         ],
-        "note": "3-page depth needed, same pattern as Nature itself. aip-and-formatting is genuinely "
-                "comprehensive (16 sections) but states no explicit word-count limit -- confirmed absence, not a gap.",
+        "note": "Originally a 3-page fetch (submission-guidelines/initial-formatting/aip-and-formatting) -- "
+                "extended to 7 pages after the extract.py pass built from those 3 alone came back with "
+                "article_types/peer_review_model/preprint_policy/ai_use_policy all needs_review, and a closer "
+                "read found submission-guidelines.html links to a 'Content types' page (-> content) plus "
+                "journal-level editorial-policies/peer-review, /preprints-conference-proceedings, /ai pages "
+                "-- none originally in this manifest, same category of gap as Nature's own first pass before "
+                "its 8-page build. The word-count 'confirmed absence' this note used to claim was wrong: "
+                "aip-and-formatting.md itself proves per-type limits exist ('ensure the legend does not "
+                "exceed the word limit of the article type') without stating them -- they live on content, "
+                "genuinely unfetched, not absent.",
     },
     {
         "slug": "nature-food", "journal": "Nature Food", "issn": "2662-1355",
@@ -79,8 +91,12 @@ TARGETS = [
             {"name": "submission-guidelines", "url": "https://www.nature.com/natfood/submission-guidelines"},
             {"name": "initial-formatting", "url": "https://www.nature.com/natfood/submission-guidelines/initial-formatting"},
             {"name": "aip-and-formatting", "url": "https://www.nature.com/natfood/submission-guidelines/aip-and-formatting"},
+            {"name": "content", "url": "https://www.nature.com/natfood/content"},
+            {"name": "peer-review-policy", "url": "https://www.nature.com/natfood/editorial-policies/peer-review"},
+            {"name": "preprint-policy", "url": "https://www.nature.com/natfood/editorial-policies/preprints-conference-proceedings"},
+            {"name": "ai-policy", "url": "https://www.nature.com/natfood/editorial-policies/ai"},
         ],
-        "note": "See Nature Sustainability note -- identical platform, identical pattern.",
+        "note": "See Nature Sustainability note -- identical platform, identical pattern, same 3-page-to-7-page extension.",
     },
     {
         "slug": "frontiers-sustainable-food-systems", "journal": "Frontiers in Sustainable Food Systems", "issn": "2571-581X",
