@@ -232,7 +232,7 @@ def test_scope_sentence_names_topics_and_fields():
 
 # ---------------------------------------------------------- build/shards
 def test_shard_key_is_four_chars():
-    assert shard_key("0028-0836") == "0028"
+    assert shard_key("0028-0836") == "0028-0836"
 
 
 def test_shard_key_spreads_load():

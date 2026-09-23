@@ -329,6 +329,7 @@ body {
 /* Limits line up digit-for-digit, which is the whole point of the column. */
 .types-table td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .types-table td.num .cost-note { display: block; white-space: normal; }
+.types-table tbody th .cost-note { display: block; font-size: .8rem; }
 
 @media (max-width: 520px) {
   /* "Up to 12,000 words" beside a long type name leaves each about eight
@@ -336,6 +337,28 @@ body {
   .types-table th, .types-table td { padding: 5px 6px; }
   .types-table td.num { white-space: normal; }
 }
+
+/* Reader-supplied limits form. Fixed layout with every input filling its
+   column: inputs sized on their own (Safari gives number boxes a wide
+   intrinsic width) pushed the table past the modal. Below the table's minimum
+   width the wrapper scrolls sideways rather than overflowing the card. */
+.gl-form { margin-top: 12px; }
+.gl-url { display: block; font-size: .9rem; color: var(--muted); }
+.gl-url input { display: block; width: 100%; margin-top: 4px; }
+.gl-form input { padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; font: inherit;
+  min-width: 0; }
+.gl-scroll { overflow-x: auto; }
+.gl-table { table-layout: fixed; min-width: 360px; }
+.gl-c-num { width: 22%; }
+.gl-c-rm { width: 40px; }
+.gl-table td { padding: 5px 4px; border-bottom: 0; }
+.gl-table td input { width: 100%; }
+.gl-table input[type="number"] { font-variant-numeric: tabular-nums; }
+.gl-table .gl-note td { padding-top: 0; border-bottom: 1px solid var(--line); }
+.gl-table .gl-note input { display: block; width: 100%; font-size: .85rem; }
+.gl-table .gl-remove { margin-left: 0; }
+.gl-output { margin-top: 14px; max-height: 260px; overflow: auto; background: #f6f8fa;
+  border: 1px solid var(--line); border-radius: 8px; padding: 10px; font-size: .78rem; }
 
 .wanted-list { margin: 8px 0 0; padding-left: 1.2rem; font-size: .9rem; }
 .wanted-list li { margin-bottom: 3px; }

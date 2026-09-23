@@ -842,28 +842,6 @@ function wordLimit(t) {
     : main;
 }
 
-function figureLimit(guideline) {
-  const figurelimits = guideline.figure_limits[0];
-  if (!figurelimits) return "—";
-  console.log( figurelimits);
-  const n = (v) => Number(v).toLocaleString();
-  let main;
-  if (figurelimits.min != null && figurelimits.max != null) {
-    main = figurelimits.min === figurelimits.max ? `${n(figurelimits.max)}` : `${n(figurelimits.min)}–${n(figurelimits.max)}`;
-  } else if (figurelimits.max != null) {
-    main = `Up to ${n(figurelimits.max)}`;
-  } else if (figurelimits.min != null) {
-    main = `At least ${n(figurelimits.min)}`;
-  } else {
-    console.log("No min or max for figure limits");
-    return "—";
-  }
-
-  return (figurelimits.excludes && figurelimits.excludes.length)
-    ? `${main} <span class="cost-note">(excludes ${esc(figurelimits.excludes.join(", "))})</span>`
-    : main;
-}
-
 function ValidationWarning(guideline) {
   const scraped = prettyDate((guideline.date_scraped || "").slice(0, 10));
   if (guideline.LLM == true && guideline.validated == false) {
@@ -903,19 +881,23 @@ function ValidationWarning(guideline) {
  * order would scatter. */
 function guidelinesBlock(j) {
   const g = j.guidelines;
-  if (!g) {
-    console.log(`No guidelines for ${j.title} (${j.issns[0]})`);
-    return "";
-  }
   const types = (g && g.article_types) || [];
+  // Offered even when nothing is held: a journal with no limits recorded is
+  // exactly where a reader filling them in helps most.
+  const editLink = `<p class="src"><a href="#" id="guidelines-edit">${
+    types.length ? "Correct or add" : "Fill in"} word limits for this journal</a></p>`;
   if (!types.length) {
-    console.log(`No article types for ${j.title} (${j.issns[0]})`);
-    return "";
+    return `
+    <div class="detail-section">
+      <h4>Accepted Article Types</h4>
+      <p class="cost-note">No word limits are held for this journal.</p>
+      ${editLink}
+    </div>`;
   }
   const rows = types.map(t => `<tr>
-      <th scope="row">${esc(t.type || "Unnamed type")}</th>
+      <th scope="row">${esc(t.type || "Unnamed type")}${
+        t.notes ? `<span class="cost-note">${esc(t.notes)}</span>` : ""}</th>
       <td class="num">${wordLimit(t)}</td>
-      <td class="num">${figureLimit(t)}</td>
     </tr>`).join("");
 
   // Empty when the date is missing or not a plain ISO day.
@@ -925,13 +907,188 @@ function guidelinesBlock(j) {
       <table class="types-table">
         <thead>
           <tr><th scope="col">Article type</th>
-          <th scope="col">Total word limit</th>
-          <th scope="col">Figure limit</th></tr>
+          <th scope="col">Total word limit</th></tr>
         </thead>
         <tbody>${rows}</tbody>
       </table>
       ${ValidationWarning(g)}
+      ${editLink}
     </div>`;
+}
+
+/* A form for a reader to record word limits per article type, and
+ * save them to data/guidelines/<id>.json in the same shape the build reads. Fields the form does not
+ * cover are carried over from the existing record rather than dropped. */
+function showGuidelinesForm(id, j) {
+  const g = j.guidelines || {};
+  const types = (g.article_types && g.article_types.length) ? g.article_types : [{}];
+  const val = (v) => (v == null ? "" : esc(v));
+
+  const typeRow = (t) => {
+    const w = t.total_word_limit || {};
+    // One tbody per type, so the note row stays attached to its limits row
+    // and removing a type removes both.
+    return `<tbody class="gl-row">
+      <tr>
+        <td><input name="type" value="${val(t.type)}" placeholder="e.g. Original Research" aria-label="Article type"></td>
+        <td><input name="w-min" type="number" min="0" value="${val(w.min)}" aria-label="Minimum words"></td>
+        <td><input name="w-max" type="number" min="0" value="${val(w.max)}" aria-label="Maximum words"></td>
+        <td><button type="button" class="btn secondary tiny gl-remove" aria-label="Remove this article type">×</button></td>
+      </tr>
+      <tr class="gl-note">
+        <td colspan="4"><input name="notes" value="${val(t.notes)}"
+          placeholder="Note (optional), e.g. abstract counted separately" aria-label="Note"></td>
+      </tr>
+    </tbody>`;
+  };
+
+  showModal(`
+    <h2 id="detail-title">Word limits</h2>
+    <p class="pub">${esc(j.title)}</p>
+    <p class="cost-note">One row per article type, as the journal's own author
+      guidelines state them. Leave a box empty if the journal gives no number.
+      Set min and max to the same number for a single stated limit.</p>
+    <form id="gl-form" class="gl-form">
+      <label class="gl-url">Author guidelines page
+        <input name="url" type="url" value="${val(g.url || (j.submission || {}).author_instructions_url)}"
+          placeholder="https://…"></label>
+      <div class="gl-scroll"><table class="types-table gl-table">
+        <colgroup><col class="gl-c-type"><col span="2" class="gl-c-num"><col class="gl-c-rm"></colgroup>
+        <thead><tr>
+          <th scope="col">Article type</th>
+          <th scope="col">Words min</th><th scope="col">Words max</th>
+          <th></th>
+        </tr></thead>
+        ${types.map(typeRow).join("")}
+      </table></div>
+      <p><button type="button" class="btn secondary tiny" id="gl-add">+ Add article type</button></p>
+      <div>
+        <button type="button" class="btn" id="gl-github">Submit on GitHub ↗</button>
+        <button type="submit" class="btn secondary">Save locally</button>
+        <button type="button" class="btn secondary" id="gl-back">Back to journal</button>
+      </div>
+      <p id="gl-error" class="cost-note" hidden></p>
+    </form>
+    <pre id="gl-output" class="gl-output" hidden></pre>`);
+
+  const tbody = $("#gl-form .gl-table");
+  $("#gl-add").addEventListener("click", () => {
+    tbody.insertAdjacentHTML("beforeend", typeRow({}));
+    tbody.lastElementChild.querySelector("input").focus();
+  });
+  tbody.addEventListener("click", (e) => {
+    const rm = e.target.closest(".gl-remove");
+    if (rm) rm.closest(".gl-row").remove();
+  });
+  $("#gl-back").addEventListener("click", () => openDetail(id));
+
+  // Read and check the rows once, for either destination. Only what the form
+  // edits is returned; merging into the full record happens on save.
+  const readForm = () => {
+    const num = (row, name) => {
+      const v = row.querySelector(`[name="${name}"]`).value.trim();
+      return v === "" ? null : Number(v);
+    };
+    const errors = [];
+    const rows = [...tbody.querySelectorAll(".gl-row")].map((row, i) => {
+      const type = row.querySelector('[name="type"]').value.trim();
+      if (!type) { errors.push(`Row ${i + 1} has no article type.`); return null; }
+      const [min, max] = ["w-min", "w-max"].map(n => num(row, n));
+      if (min != null && max != null && min > max) errors.push(`${type}: word min is above max.`);
+      return { type, min, max, notes: row.querySelector('[name="notes"]').value.trim() || null };
+    }).filter(Boolean);
+    if (!rows.length) errors.push("Add at least one article type.");
+    const err = $("#gl-error");
+    err.hidden = !errors.length;
+    err.textContent = errors.join(" ");
+    return errors.length ? null : { rows, url: $('#gl-form [name="url"]').value.trim() || null };
+  };
+
+  // Opens a pre-filled issue; the guidelines-submission workflow turns it
+  // into a pull request. The issue carries only the edited fields, not the
+  // whole record — the full file would outgrow what GitHub accepts in a URL —
+  // and the workflow merges them into data/guidelines/<id>.json.
+  $("#gl-github").addEventListener("click", () => {
+    const form = readForm();
+    if (!form) return;
+    const submission = {
+      id, journal: j.title, publisher: j.publisher || null, issns: j.issns,
+      url: form.url, article_types: form.rows,
+    };
+    const body = `<!-- guidelines-submission -->
+Word limits for **${j.title}** (\`${id}\`), submitted from the APC Finder.
+
+A workflow turns this issue into a pull request and links it here. To correct
+the submission, edit the JSON below and the pull request will be updated.
+
+\`\`\`json
+${JSON.stringify(submission)}
+\`\`\`
+`;
+    window.open(`https://github.com/${STATE.config.github_repo}/issues/new?title=${
+      encodeURIComponent(`Word limits: ${j.title} (${id})`)}&body=${encodeURIComponent(body)}`,
+      "_blank", "noopener");
+  });
+
+  $("#gl-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const form = readForm();
+    if (!form) return;
+    const err = $("#gl-error");
+    const byType = new Map((g.article_types || []).map(t => [t.type, t]));
+    const out = form.rows.map(({ type, min, max, notes }) => {
+      const prev = byType.get(type) || {};
+      return {
+        ...prev,
+        type,
+        notes,
+        total_word_limit: (min == null && max == null) ? null : {
+          unit: "words", excludes: [], notes: null, ...(prev.total_word_limit || {}), min, max,
+        },
+      };
+    });
+
+    const record = {
+      ...g,
+      journal: j.title,
+      publisher: j.publisher || g.publisher || null,
+      issn: g.issn || { print: j.issns[0] || null, electronic: j.issns[1] || null },
+      LLM: false,
+      validated: false,
+      url: form.url,
+      date_scraped: new Date().toISOString().slice(0, 10),
+      article_types: out,
+      source: "user",
+    };
+    const json = JSON.stringify(record, null, 2);
+    const pre = $("#gl-output");
+    pre.textContent = json;
+    pre.hidden = false;
+
+    // Saved by the local preview server (pipeline/serve.py); the deployed
+    // static site has nowhere to write, so a failure there is expected.
+    let resp;
+    try {
+      resp = await fetch(`api/guidelines/${encodeURIComponent(id)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: json,
+      });
+    } catch (fetchErr) {
+      resp = null;
+    }
+    const result = resp && await resp.json().catch(() => ({}));
+    err.hidden = false;
+    if (resp && resp.ok) {
+      // Updates the cached shard record, so "Back to journal" shows the new
+      // limits straight away rather than after the next build.
+      j.guidelines = record;
+      err.textContent = `Saved to ${result.saved}. It will be included in the next build.`;
+    } else {
+      err.textContent = `Could not save: ${(result && result.error) ||
+        "saving needs the local server (make run)"}. Use "Submit on GitHub" instead.`;
+    }
+  });
 }
 
 async function openDetail(id) {
@@ -1044,6 +1201,10 @@ async function openDetail(id) {
     const merged = base.replace("**What looks wrong (please describe):**\n\n",
       `**What looks wrong (please describe):**\n${extra}\n`);
     submit.href = `https://github.com/${STATE.config.github_repo}/issues/new?title=${rep.title}&labels=user-report&body=${encodeURIComponent(merged)}`;
+  });
+  $("#guidelines-edit").addEventListener("click", (e) => {
+    e.preventDefault();
+    showGuidelinesForm(id, j);
   });
   $("#modal-close").focus();
 }
