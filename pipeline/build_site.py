@@ -12,11 +12,12 @@ from __future__ import annotations
 
 import json
 import re
+from glob import glob
 import shutil
 from collections import defaultdict
 from pathlib import Path
 
-from common import CACHE, OUT, ROOT, load_config, read_json, utcnow, write_json
+from common import DATA, CACHE, OUT, ROOT, load_config, read_json, utcnow, write_json
 
 SITE_SRC = ROOT / "site"
 SITE_OUT = ROOT / "_site"
@@ -29,8 +30,11 @@ STOPWORDS = {"and", "of", "the", "in", "for", "to", "a", "on", "with", "by",
 # Published in config.json so the client cannot drift from the build: when
 # this went 2 -> 4, app.js kept requesting the old path and every journal click
 # silently 404'd.
-SHARD_KEY_LENGTH = 4
-
+SHARD_KEY_LENGTH = 9
+# Scraped author guidelines, keyed by the ISSN the file is named for. That is
+# not always the journal's ISSN-L, so records are matched on any of their
+# ISSNs, not just the id.
+AVAILABLE_GUIDELINES = {f.stem: f for f in (DATA / "guidelines").glob("*.json")}
 
 def shard_key(issn_l: str) -> str:
     """Detail records are sharded on the ISSN-L prefix, and the browser fetches
@@ -169,7 +173,12 @@ def main() -> None:
     # Parallel to index.json's journal order.
     write_json(datadir / "keywords.json", {"vocab": list(vocab),
                                            "ids": keyword_ids})
+    
     for key, records in shards.items():
+        if key in AVAILABLE_GUIDELINES:
+            with open(AVAILABLE_GUIDELINES[key]) as guideline_file:
+                print(f"Adding guidelines for shard {key} from {AVAILABLE_GUIDELINES[key]}")
+                records[key]["guidelines"] = json.load(guideline_file)
         write_json(datadir / "details" / f"{key}.json", records)
 
     # ---- status page data

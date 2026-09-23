@@ -808,9 +808,129 @@ function submissionBlock(j) {
         <a href="https://doaj.org/" target="_blank" rel="noopener">DOAJ</a> entry,
         not by Oxford — and describing the journal's stated policy, not any
         individual submission.</p>
-      <p class="cost-note">Word limits, LaTeX and preprint policies are not
-        shown because no structured source publishes them; they live in the
-        author guidelines above.</p>
+      ${j.guidelines ? "" : `<p class="cost-note">Word limits, LaTeX and
+        preprint policies are not shown because no structured source publishes
+        them; they live in the author guidelines above.</p>`}
+    </div>`;
+}
+
+/* A word limit as the journal states it.
+ *
+ * min and max are both optional and are frequently equal: the scraper fills
+ * both from a page that quotes a single ceiling. Equal bounds are rendered as
+ * a bare count rather than "up to", because the column heading already says
+ * these are limits and the source does not always say which bound it meant. */
+function wordLimit(t) {
+  const w = t.total_word_limit;
+  if (!w) return "—";
+  const n = (v) => Number(v).toLocaleString();
+  const unit = esc(w.unit || "words");
+  let main;
+  if (w.min != null && w.max != null) {
+    main = w.min === w.max ? `${n(w.max)} ${unit}` : `${n(w.min)}–${n(w.max)} ${unit}`;
+  } else if (w.max != null) {
+    main = `Up to ${n(w.max)} ${unit}`;
+  } else if (w.min != null) {
+    main = `At least ${n(w.min)} ${unit}`;
+  } else {
+    return "—";
+  }
+  // What the count leaves out changes what the number means, so it travels
+  // with the number rather than being dropped.
+  return (w.excludes && w.excludes.length)
+    ? `${main} <span class="cost-note">(excludes ${esc(w.excludes.join(", "))})</span>`
+    : main;
+}
+
+function figureLimit(guideline) {
+  const figurelimits = guideline.figure_limits[0];
+  if (!figurelimits) return "—";
+  console.log( figurelimits);
+  const n = (v) => Number(v).toLocaleString();
+  let main;
+  if (figurelimits.min != null && figurelimits.max != null) {
+    main = figurelimits.min === figurelimits.max ? `${n(figurelimits.max)}` : `${n(figurelimits.min)}–${n(figurelimits.max)}`;
+  } else if (figurelimits.max != null) {
+    main = `Up to ${n(figurelimits.max)}`;
+  } else if (figurelimits.min != null) {
+    main = `At least ${n(figurelimits.min)}`;
+  } else {
+    console.log("No min or max for figure limits");
+    return "—";
+  }
+
+  return (figurelimits.excludes && figurelimits.excludes.length)
+    ? `${main} <span class="cost-note">(excludes ${esc(figurelimits.excludes.join(", "))})</span>`
+    : main;
+}
+
+function ValidationWarning(guideline) {
+  const scraped = prettyDate((guideline.date_scraped || "").slice(0, 10));
+  if (guideline.LLM == true && guideline.validated == false) {
+    return `
+  <p class="derived-note">
+    Scraped by LLM from
+    ${guideline.url ? `<a href="${esc(guideline.url)}" target="_blank" rel="noopener">the journal's own author guidelines ↗</a>` : "the journal's own author guidelines"}
+    ${scraped ? ` on ${esc(scraped)}` : ""}.
+    The information is not validated and may be inaccurate. Please confirm the information in the journal's own author guidelines.
+  </p>`
+  }
+  if (guideline.LLM == false && guideline.validated == false) {
+    return `
+  <p class="derived-note">
+    Provided by a person from
+    ${guideline.url ? `<a href="${esc(guideline.url)}" target="_blank" rel="noopener">the journal's own author guidelines ↗</a>` : "the journal's own author guidelines"}
+    ${scraped ? ` on ${esc(scraped)}` : ""}.
+    The information is not validated and may be inaccurate. Please confirm the information in the journal's own author guidelines.
+  </p>`
+  }
+  if (guideline.validated == true) {
+    return `
+  <p class="derived-note">
+    Validated by a person from
+    ${guideline.url ? `<a href="${esc(guideline.url)}" target="_blank" rel="noopener">the journal's own author guidelines ↗</a>` : "the journal's own author guidelines"}
+    ${scraped ? ` on ${esc(scraped)}` : ""}.
+    The information is validated by a person and is likely to be accurate. Please confirm the information in the journal's own author guidelines.
+  </p>`
+  }
+}
+
+/* Scraped from the journal's own author-guidelines page — unlike everything
+ * else on the page, which comes from an index — so it exists for only a
+ * handful of journals and the section is omitted entirely for the rest.
+ * Article types are kept in the publisher's own order: it groups related
+ * types together and puts the main research article first, which alphabetical
+ * order would scatter. */
+function guidelinesBlock(j) {
+  const g = j.guidelines;
+  if (!g) {
+    console.log(`No guidelines for ${j.title} (${j.issns[0]})`);
+    return "";
+  }
+  const types = (g && g.article_types) || [];
+  if (!types.length) {
+    console.log(`No article types for ${j.title} (${j.issns[0]})`);
+    return "";
+  }
+  const rows = types.map(t => `<tr>
+      <th scope="row">${esc(t.type || "Unnamed type")}</th>
+      <td class="num">${wordLimit(t)}</td>
+      <td class="num">${figureLimit(t)}</td>
+    </tr>`).join("");
+
+  // Empty when the date is missing or not a plain ISO day.
+  return `
+    <div class="detail-section">
+      <h4>Accepted Article Types</h4>
+      <table class="types-table">
+        <thead>
+          <tr><th scope="col">Article type</th>
+          <th scope="col">Total word limit</th>
+          <th scope="col">Figure limit</th></tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+      ${ValidationWarning(g)}
     </div>`;
 }
 
@@ -888,6 +1008,7 @@ async function openDetail(id) {
     </div>` : ""}
 
     ${submissionBlock(j)}
+    ${guidelinesBlock(j)}
 
     <div class="detail-section">
       <h4>Sources for the information above</h4>

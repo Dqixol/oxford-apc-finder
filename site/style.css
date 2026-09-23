@@ -315,6 +315,28 @@ body {
   .subm-grid dd { margin-bottom: 8px; }
 }
 
+/* ---- "Article types and word limits" ----------------------------------
+ * A real table because it is one: two dimensions the reader compares down
+ * the column ("which type lets me write longest?"). The type is a row header
+ * so a screen reader announces it with each limit. */
+.types-table { width: 100%; border-collapse: collapse; margin: 12px 0 4px; font-size: .9rem; }
+.types-table th, .types-table td {
+  text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.types-table thead th { color: var(--muted); font-weight: 600; font-size: .8rem; }
+.types-table tbody th { font-weight: 400; }
+/* Limits line up digit-for-digit, which is the whole point of the column. */
+.types-table td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.types-table td.num .cost-note { display: block; white-space: normal; }
+
+@media (max-width: 520px) {
+  /* "Up to 12,000 words" beside a long type name leaves each about eight
+     characters of room, so let the limit wrap under its type instead. */
+  .types-table th, .types-table td { padding: 5px 6px; }
+  .types-table td.num { white-space: normal; }
+}
+
 .wanted-list { margin: 8px 0 0; padding-left: 1.2rem; font-size: .9rem; }
 .wanted-list li { margin-bottom: 3px; }
 
