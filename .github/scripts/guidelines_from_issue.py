@@ -2,7 +2,7 @@
 
 Run by .github/workflows/guidelines-submission.yml. The issue is opened from
 the journal detail form on the site and carries only what that form edits
-(article type, word min/max, note, guidelines URL); this merges it into the
+(article type, word min/max, note, structure, figures & tables, guidelines URL); this merges it into the
 existing file so fields the form does not show — descriptions, required
 sections, anything scraped — survive. Same merge as the site's local save.
 
@@ -99,8 +99,14 @@ def parse(body: str) -> dict:
         hi = count(t.get("max"), f"{name}: max")
         if lo is not None and hi is not None and lo > hi:
             raise Rejected(f"{name}: word min is above max.")
-        rows.append({"type": name, "min": lo, "max": hi,
-                     "notes": text(t.get("notes"), f"{name}: notes", 1000)})
+        row = {"type": name, "min": lo, "max": hi,
+               "notes": text(t.get("notes"), f"{name}: notes", 1000)}
+        # Absent (an issue opened before the form had these boxes) keeps what
+        # the file holds; present but blank clears it, as for notes.
+        for key in ("structure", "figures_tables"):
+            if key in t:
+                row[key] = text(t[key], f"{name}: {key}", 2000)
+        rows.append(row)
 
     return {
         "id": journal_id,
@@ -122,7 +128,8 @@ def merge(sub: dict, existing: dict, issue_url: str | None) -> dict:
             limit = {"unit": "words", "excludes": [], "notes": None,
                      **(prev.get("total_word_limit") or {}),
                      "min": r["min"], "max": r["max"]}
-        types.append({**prev, "type": r["type"], "notes": r["notes"],
+        extra = {k: r[k] for k in ("structure", "figures_tables") if k in r}
+        types.append({**prev, "type": r["type"], "notes": r["notes"], **extra,
                       "total_word_limit": limit})
     issns = sub["issns"] + [None, None]
     return {

@@ -11,407 +11,152 @@
   "date_scraped": "2026-09-18",
   "article_types": [
     {
-      "type": "Original Research",
-      "source_url": "https://www.frontiersin.org/journals/sustainable-food-systems/for-authors/article-types",
-      "description": "Reports on primary, unpublished studies; also covers confirming/disconfirming studies and non-reproducibility reports.",
+      "type": "Article",
+      "description": "A substantial novel research study, with a complex story often involving several techniques or approaches.",
       "total_word_limit": {
-        "min": 12000,
-        "max": 12000,
+        "min": 3500,
+        "max": 3500,
         "unit": "words",
-        "excludes": [],
-        "notes": "Maximum word count stated as a single ceiling on the source page."
+        "excludes": [
+          "abstract",
+          "Methods",
+          "references",
+          "figure legends"
+        ],
+        "notes": null
       },
-      "required_sections": [
-        "Abstract",
-        "Introduction",
-        "Materials and Methods",
-        "Results",
-        "Discussion"
-      ],
-      "section_word_limits": [],
-      "figure_limits": [],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": null
+      "structure": "Title (≤10 words or 90 characters), Abstract (≤150 words, unreferenced, no heading), Introduction (no heading), Results, Discussion, Methods",
+      "figures_tables": "Up to 6 display items (figures and/or tables).",
+      "source_urls": [
+        "https://www.nature.com/natsustain/content"
+      ]
     },
     {
-      "type": "Systematic Review",
-      "source_url": "https://www.frontiersin.org/journals/sustainable-food-systems/for-authors/article-types",
-      "description": "Synthesis of previous research using clearly defined methods; includes meta-syntheses, meta-analyses, mapping/scoping reviews.",
+      "type": "Analysis",
+      "description": "A new analysis of existing data, or new data obtained in a comparative analysis, leading to novel and arresting conclusions of importance to a broad audience.",
       "total_word_limit": {
-        "min": 12000,
-        "max": 12000,
+        "min": 3500,
+        "max": 3500,
         "unit": "words",
-        "excludes": [],
-        "notes": "Maximum word count stated as a single ceiling on the source page."
+        "excludes": [
+          "abstract",
+          "Methods",
+          "references",
+          "figure legends"
+        ],
+        "notes": null
       },
-      "required_sections": [],
-      "section_word_limits": [],
-      "figure_limits": [],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": null
+      "structure": "Title (≤10 words or 90 characters), Abstract (≤150 words, unreferenced, no heading), Introduction (no heading), Results, Discussion, Methods",
+      "figures_tables": "Up to 6 display items (figures and/or tables).",
+      "source_urls": [
+        "https://www.nature.com/natsustain/content"
+      ]
     },
     {
-      "type": "Methods",
-      "source_url": "https://www.frontiersin.org/journals/sustainable-food-systems/for-authors/article-types",
-      "description": "Presents a new or established method, protocol, or technique of significant interest in the field.",
+      "type": "Resource",
+      "description": "Presents a large data set of broad utility, interest and significance to the community.",
       "total_word_limit": {
-        "min": 12000,
-        "max": 12000,
+        "min": 3500,
+        "max": 3500,
+        "unit": "words",
+        "excludes": [
+          "abstract",
+          "Methods",
+          "references",
+          "figure legends"
+        ],
+        "notes": null
+      },
+      "structure": "Title (≤10 words or 90 characters), Abstract (≤150 words, unreferenced, no heading), Introduction (no heading), Results, Discussion, Methods",
+      "figures_tables": "Up to 6 display items (figures and/or tables).",
+      "source_urls": [
+        "https://www.nature.com/natsustain/content"
+      ]
+    },
+    {
+      "type": "Brief Communication",
+      "description": "Reports a concise study of high quality and broad interest.",
+      "total_word_limit": {
+        "min": 1500,
+        "max": 1500,
+        "unit": "words",
+        "excludes": [
+          "abstract",
+          "Methods",
+          "references",
+          "figure legends"
+        ],
+        "notes": "No subheadings within the main text."
+      },
+      "structure": "Title (≤10 words or 90 characters), Abstract (≤70 words, 3 sentences, unreferenced), Methods (≤500 words)",
+      "figures_tables": "Up to 2 display items, flexible at editor discretion if page limit observed.",
+      "source_urls": [
+        "https://www.nature.com/natsustain/content"
+      ]
+    },
+    {
+      "type": "Correspondence",
+      "description": "Forum for comment on issues relevant to the journal's community -- not for presenting research data or analysis. Technical comments on peer-reviewed papers go through Matters Arising instead.",
+      "total_word_limit": {
+        "min": 300,
+        "max": 800,
         "unit": "words",
         "excludes": [],
-        "notes": "Maximum word count stated as a single ceiling on the source page."
+        "notes": null
       },
-      "required_sections": [
-        "Abstract",
-        "Introduction (outlining the protocol)"
-      ],
-      "section_word_limits": [],
-      "figure_limits": [],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": null
+      "structure": null,
+      "figures_tables": "1 display item.",
+      "source_urls": [
+        "https://www.nature.com/natsustain/content"
+      ]
     },
     {
       "type": "Review",
-      "source_url": "https://www.frontiersin.org/journals/sustainable-food-systems/for-authors/article-types",
-      "description": "Comprehensive, balanced overview of a topic with significant recent development -- a full state-of-the-art treatment, not a mere literature summary.",
-      "total_word_limit": {
-        "min": 12000,
-        "max": 12000,
-        "unit": "words",
-        "excludes": [],
-        "notes": "Maximum word count stated as a single ceiling on the source page."
-      },
-      "required_sections": [],
-      "section_word_limits": [],
-      "figure_limits": [],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": null
-    },
-    {
-      "type": "Mini Review",
-      "source_url": "https://www.frontiersin.org/journals/sustainable-food-systems/for-authors/article-types",
-      "description": "Succinct, focused summary of a current area of investigation and its recent developments.",
-      "total_word_limit": {
-        "min": 3000,
-        "max": 3000,
-        "unit": "words",
-        "excludes": [],
-        "notes": "Maximum word count stated as a single ceiling on the source page."
-      },
-      "required_sections": [],
-      "section_word_limits": [],
-      "figure_limits": [
-        {
-          "min": null,
-          "max": 2,
-          "counts": "figures and tables combined",
-          "notes": null
-        }
-      ],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": null
-    },
-    {
-      "type": "Policy and Practice Reviews",
-      "source_url": "https://www.frontiersin.org/journals/sustainable-food-systems/for-authors/article-types",
-      "description": "Comprehensive, balanced overview of policy/regulation/guideline topics from academia, societies, regulators, or industry. More space than Policy Briefs to elaborate.",
-      "total_word_limit": {
-        "min": 12000,
-        "max": 12000,
-        "unit": "words",
-        "excludes": [],
-        "notes": "Maximum word count stated as a single ceiling on the source page."
-      },
-      "required_sections": [],
-      "section_word_limits": [],
-      "figure_limits": [],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": null
-    },
-    {
-      "type": "Hypothesis and Theory",
-      "source_url": "https://www.frontiersin.org/journals/sustainable-food-systems/for-authors/article-types",
-      "description": "Presents a novel, testable argument, interpretation, or model intended to introduce a new hypothesis or theory.",
-      "total_word_limit": {
-        "min": 12000,
-        "max": 12000,
-        "unit": "words",
-        "excludes": [],
-        "notes": "Maximum word count stated as a single ceiling on the source page."
-      },
-      "required_sections": [],
-      "section_word_limits": [],
-      "figure_limits": [],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": null
-    },
-    {
-      "type": "Perspective",
-      "source_url": "https://www.frontiersin.org/journals/sustainable-food-systems/for-authors/article-types",
-      "description": "A viewpoint on a specific area of investigation, discussing current advances and future directions; may include original data plus personal insight.",
-      "total_word_limit": {
-        "min": 3000,
-        "max": 3000,
-        "unit": "words",
-        "excludes": [],
-        "notes": "Maximum word count stated as a single ceiling on the source page."
-      },
-      "required_sections": [],
-      "section_word_limits": [],
-      "figure_limits": [
-        {
-          "min": null,
-          "max": 2,
-          "counts": "figures and tables combined",
-          "notes": null
-        }
-      ],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": null
-    },
-    {
-      "type": "Community Case Study",
-      "source_url": "https://www.frontiersin.org/journals/sustainable-food-systems/for-authors/article-types",
-      "description": "Documents local experience delivering a service to meet an identified need -- reflection on a program/practice, in contrast to investigator-driven research.",
+      "description": "An authoritative, balanced and scholarly survey of recent developments in a research field; not dominated by a single laboratory's work. Mostly editor-invited; unsolicited proposals considered via a 1-2 page synopsis submission (Synopsis-Review option). A study using a structured, replicable literature-extraction method is reclassified as original research and should follow the Article/Analysis format instead.",
       "total_word_limit": {
         "min": 5000,
         "max": 5000,
         "unit": "words",
         "excludes": [],
-        "notes": "Maximum word count stated as a single ceiling on the source page."
+        "notes": null
       },
-      "required_sections": [],
-      "section_word_limits": [],
-      "figure_limits": [
-        {
-          "min": null,
-          "max": 5,
-          "counts": "figures and tables combined",
-          "notes": null
-        }
-      ],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": null
+      "structure": "Preface (≤100 words, unreferenced)",
+      "figures_tables": "Up to 6 display items. Illustrations strongly encouraged.",
+      "source_urls": [
+        "https://www.nature.com/natsustain/content"
+      ]
     },
     {
-      "type": "Conceptual Analysis",
-      "source_url": "https://www.frontiersin.org/journals/sustainable-food-systems/for-authors/article-types",
-      "description": "Explores the concepts and issues that define a field, examining constituent elements and their connections. Must not include unpublished material.",
+      "type": "Perspective",
+      "description": "A forum for authors to discuss models and ideas from a personal viewpoint -- more forward-looking/speculative than Reviews, may take a narrower field of view, may advocate a controversial position. Mostly editor-invited; unsolicited proposals considered via a 1-2 page synopsis submission (Synopsis-Perspective option).",
       "total_word_limit": {
-        "min": 8000,
-        "max": 8000,
+        "min": 5000,
+        "max": 5000,
         "unit": "words",
         "excludes": [],
-        "notes": "Maximum word count stated as a single ceiling on the source page."
+        "notes": null
       },
-      "required_sections": [],
-      "section_word_limits": [],
-      "figure_limits": [
-        {
-          "min": null,
-          "max": 10,
-          "counts": "figures and tables combined",
-          "notes": null
-        }
-      ],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": null
+      "structure": "Preface (≤100 words, unreferenced)",
+      "figures_tables": "Up to 6 display items.",
+      "source_urls": [
+        "https://www.nature.com/natsustain/content"
+      ]
     },
     {
-      "type": "Data Report",
-      "source_url": "https://www.frontiersin.org/journals/sustainable-food-systems/for-authors/article-types",
-      "description": "Describes a research dataset; the dataset must be deposited in a public repository and fixed/publicly available on publication.",
+      "type": "Comment",
+      "description": "Opinionated pieces on a topical issue in sustainability research, policy or societal debate -- agenda-setting, authoritative, can be provocative but must road-map a proposed solution, not just describe a problem. Mostly editor-invited; unsolicited proposals considered via a 1-page synopsis submission (Synopsis-Comment option).",
       "total_word_limit": {
-        "min": 3000,
-        "max": 3000,
+        "min": 1500,
+        "max": 1500,
         "unit": "words",
         "excludes": [],
-        "notes": "Maximum word count stated as a single ceiling on the source page."
+        "notes": null
       },
-      "required_sections": [],
-      "section_word_limits": [],
-      "figure_limits": [
-        {
-          "min": null,
-          "max": 2,
-          "counts": "figures and tables combined",
-          "notes": null
-        }
-      ],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": null
-    },
-    {
-      "type": "Policy Brief",
-      "source_url": "https://www.frontiersin.org/journals/sustainable-food-systems/for-authors/article-types",
-      "description": "Short, practical, evidence-based evaluation of a policy issue, with policy options and actionable recommendations -- a decision-making tool.",
-      "total_word_limit": {
-        "min": 3000,
-        "max": 3000,
-        "unit": "words",
-        "excludes": [],
-        "notes": "Maximum word count stated as a single ceiling on the source page."
-      },
-      "required_sections": [],
-      "section_word_limits": [],
-      "figure_limits": [
-        {
-          "min": null,
-          "max": 5,
-          "counts": "figures and tables combined",
-          "notes": null
-        }
-      ],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": null
-    },
-    {
-      "type": "Brief Research Report",
-      "source_url": "https://www.frontiersin.org/journals/sustainable-food-systems/for-authors/article-types",
-      "description": "Original research and/or preliminary findings presented more succinctly and with fewer details than Original Research; negative/non-reproducibility results encouraged.",
-      "total_word_limit": {
-        "min": 4000,
-        "max": 4000,
-        "unit": "words",
-        "excludes": [],
-        "notes": "Maximum word count stated as a single ceiling on the source page."
-      },
-      "required_sections": [],
-      "section_word_limits": [],
-      "figure_limits": [
-        {
-          "min": null,
-          "max": 4,
-          "counts": "figures and tables combined",
-          "notes": null
-        }
-      ],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": null
-    },
-    {
-      "type": "General Commentary",
-      "source_url": "https://www.frontiersin.org/journals/sustainable-food-systems/for-authors/article-types",
-      "description": "Critical comment on a previous Frontiers publication. Commentary on non-Frontiers articles should be submitted as an Opinion instead.",
-      "total_word_limit": {
-        "min": 1000,
-        "max": 1000,
-        "unit": "words",
-        "excludes": [],
-        "notes": "Maximum word count stated as a single ceiling on the source page."
-      },
-      "required_sections": [],
-      "section_word_limits": [],
-      "figure_limits": [
-        {
-          "min": null,
-          "max": 1,
-          "counts": "figures and tables combined",
-          "notes": null
-        }
-      ],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": null
-    },
-    {
-      "type": "Opinion",
-      "source_url": "https://www.frontiersin.org/journals/sustainable-food-systems/for-authors/article-types",
-      "description": "Viewpoint on the interpretation of recent findings, method value, or hypothesis strengths/weaknesses. Must not contain unpublished/original data; must be evidence-supported, fully referenced, and avoid emotional language.",
-      "total_word_limit": {
-        "min": 2000,
-        "max": 2000,
-        "unit": "words",
-        "excludes": [],
-        "notes": "Maximum word count stated as a single ceiling on the source page."
-      },
-      "required_sections": [],
-      "section_word_limits": [],
-      "figure_limits": [
-        {
-          "min": null,
-          "max": 1,
-          "counts": "figures and tables combined",
-          "notes": null
-        }
-      ],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": null
-    },
-    {
-      "type": "Technology and Code",
-      "source_url": "https://www.frontiersin.org/journals/sustainable-food-systems/for-authors/article-types",
-      "description": "Presents new technology, code, software, or a novel application of known technology/software, including existing algorithms under novel settings.",
-      "total_word_limit": {
-        "min": 12000,
-        "max": 12000,
-        "unit": "words",
-        "excludes": [],
-        "notes": "Maximum word count stated as a single ceiling on the source page."
-      },
-      "required_sections": [],
-      "section_word_limits": [],
-      "figure_limits": [],
-      "reference_limit": null,
-      "reference_style": null,
-      "author_limit": null,
-      "required_statements": [],
-      "notes": null
+      "structure": null,
+      "figures_tables": "Figures/diagrams encouraged, not required; does not normally contain primary research data.",
+      "source_urls": [
+        "https://www.nature.com/natsustain/content"
+      ]
     }
-  ],
-  "remarks": "Excludes Correction (procedural amendment mechanism, not a submission category), Editorial ('submitted exclusively by the host editor(s)' -- staff/host-only), and FAIR² Data (a data-deposit platform/service, not an article type). General reference/figure-format/section rules live on the platform-wide guidelines page rather than being repeated per type -- see https://www.frontiersin.org/guidelines/author-guidelines.",
-  "needs_review": [
-    "peer_review_model",
-    "preprint_policy",
-    "ai_use_policy",
-    "latex_accepted",
-    "template_provided",
-    "robots_txt_allowed",
-    "languages_accepted"
-  ],
-  "source": "scraped"
+  ]
 }

@@ -884,8 +884,8 @@ function guidelinesBlock(j) {
   const types = (g && g.article_types) || [];
   // Offered even when nothing is held: a journal with no limits recorded is
   // exactly where a reader filling them in helps most.
-  const editLink = `<p class="src"><a href="#" id="guidelines-edit">${
-    types.length ? "Correct or add" : "Fill in"} word limits for this journal</a></p>`;
+  const editLink = `<div class="gl-edit"><a href="#" class="btn" id="guidelines-edit">${
+    types.length ? "Correct or add" : "Fill in"} word limits for this journal</a></div>`;
   if (!types.length) {
     return `
     <div class="detail-section">
@@ -894,16 +894,38 @@ function guidelinesBlock(j) {
       ${editLink}
     </div>`;
   }
-  const rows = types.map(t => `<tr>
-      <th scope="row">${esc(t.type || "Unnamed type")}${
-        t.notes ? `<span class="cost-note">${esc(t.notes)}</span>` : ""}</th>
+  const rows = types.map((t, i) => {
+    const name = esc(t.type || "Unnamed type");
+    const note = t.notes ? `<span class="cost-note">${esc(t.notes)}</span>` : "";
+    const urls = (t.source_urls || []).filter(Boolean);
+    // Only a type with something to reveal gets the toggle; the rest stay
+    // plain text rather than a button that opens onto nothing.
+    if (!t.structure && !t.figures_tables && !urls.length) {
+      return `<tr>
+      <th scope="row">${name}${note}</th>
       <td class="num">${wordLimit(t)}</td>
-    </tr>`).join("");
+    </tr>`;
+    }
+    const detailId = `gl-type-${i}`;
+    return `<tr>
+      <th scope="row"><button type="button" class="type-toggle"
+        aria-expanded="false" aria-controls="${detailId}">${name}</button>${note}</th>
+      <td class="num">${wordLimit(t)}</td>
+    </tr>
+    <tr class="type-detail" id="${detailId}" hidden>
+      <td colspan="2"><div class="type-bubble"><dl>
+        ${t.structure ? `<dt>Structure</dt><dd>${esc(t.structure)}</dd>` : ""}
+        ${t.figures_tables ? `<dt>Figures and tables</dt><dd>${esc(t.figures_tables)}</dd>` : ""}
+        ${urls.length ? `<dt>Source</dt><dd>${urls.map(u =>
+          `<a href="${esc(u)}" target="_blank" rel="noopener">${esc(u)} ↗</a>`).join("<br>")}</dd>` : ""}
+      </dl></div></td>
+    </tr>`;
+  }).join("");
 
   // Empty when the date is missing or not a plain ISO day.
   return `
     <div class="detail-section">
-      <h4>Accepted Article Types</h4>
+      <h4>Accepted Article Types & Details</h4>
       <table class="types-table">
         <thead>
           <tr><th scope="col">Article type</th>
@@ -938,6 +960,14 @@ function showGuidelinesForm(id, j) {
       <tr class="gl-note">
         <td colspan="4"><input name="notes" value="${val(t.notes)}"
           placeholder="Note (optional), e.g. abstract counted separately" aria-label="Note"></td>
+      </tr>
+      <tr class="gl-note">
+        <td colspan="4"><input name="structure" value="${val(t.structure)}"
+          placeholder="Structure (optional), e.g. Abstract, Introduction, Results, Discussion, Methods" aria-label="Structure"></td>
+      </tr>
+      <tr class="gl-note">
+        <td colspan="4"><input name="figures_tables" value="${val(t.figures_tables)}"
+          placeholder="Figures & tables (optional), e.g. up to 6 display items" aria-label="Figures and tables"></td>
       </tr>
     </tbody>`;
   };
@@ -995,7 +1025,9 @@ function showGuidelinesForm(id, j) {
       if (!type) { errors.push(`Row ${i + 1} has no article type.`); return null; }
       const [min, max] = ["w-min", "w-max"].map(n => num(row, n));
       if (min != null && max != null && min > max) errors.push(`${type}: word min is above max.`);
-      return { type, min, max, notes: row.querySelector('[name="notes"]').value.trim() || null };
+      const str = (name) => row.querySelector(`[name="${name}"]`).value.trim() || null;
+      return { type, min, max, notes: str("notes"),
+        structure: str("structure"), figures_tables: str("figures_tables") };
     }).filter(Boolean);
     if (!rows.length) errors.push("Add at least one article type.");
     const err = $("#gl-error");
@@ -1036,12 +1068,14 @@ ${JSON.stringify(submission)}
     if (!form) return;
     const err = $("#gl-error");
     const byType = new Map((g.article_types || []).map(t => [t.type, t]));
-    const out = form.rows.map(({ type, min, max, notes }) => {
+    const out = form.rows.map(({ type, min, max, notes, structure, figures_tables }) => {
       const prev = byType.get(type) || {};
       return {
         ...prev,
         type,
         notes,
+        structure,
+        figures_tables,
         total_word_limit: (min == null && max == null) ? null : {
           unit: "words", excludes: [], notes: null, ...(prev.total_word_limit || {}), min, max,
         },
@@ -1205,6 +1239,13 @@ async function openDetail(id) {
   $("#guidelines-edit").addEventListener("click", (e) => {
     e.preventDefault();
     showGuidelinesForm(id, j);
+  });
+  document.querySelectorAll("#detail-body .type-toggle").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const open = btn.getAttribute("aria-expanded") !== "true";
+      btn.setAttribute("aria-expanded", String(open));
+      document.getElementById(btn.getAttribute("aria-controls")).hidden = !open;
+    });
   });
   $("#modal-close").focus();
 }

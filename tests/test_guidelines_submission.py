@@ -61,6 +61,20 @@ def test_a_new_journal_gets_its_issns_from_the_submission():
     assert rec["issn"] == {"print": "9990-0001", "electronic": "9999-0001"}
 
 
+def test_structure_and_figures_are_set_cleared_or_kept():
+    existing = {"article_types": [
+        {"type": t, "structure": "old", "figures_tables": "old"} for t in ("A", "B", "C")]}
+    sub = {**GOOD, "article_types": [
+        {"type": "A", "structure": "Abstract, Methods", "figures_tables": "Up to 6"},
+        {"type": "B", "structure": "", "figures_tables": None},
+        {"type": "C"},                      # issue from before the form had the boxes
+    ]}
+    a, b, c = gfi.merge(gfi.parse(body(sub)), existing, None)["article_types"]
+    assert (a["structure"], a["figures_tables"]) == ("Abstract, Methods", "Up to 6")
+    assert (b["structure"], b["figures_tables"]) == (None, None)
+    assert (c["structure"], c["figures_tables"]) == ("old", "old")
+
+
 def test_blank_limits_clear_the_word_limit():
     sub = {**GOOD, "article_types": [{"type": "Editorial", "min": None, "max": None}]}
     rec = gfi.merge(gfi.parse(body(sub)), {}, None)
