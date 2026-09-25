@@ -2,7 +2,7 @@
 site_title: "Oxford journal article processing charge (APC) finder"
 site_tagline: "Which journals do Oxford's open-access deals cover, and what will publishing cost?"
 # GitHub repository that hosts this site (used for error-report links).
-github_repo: "Dqixol/oxford-apc-finder"
+github_repo: "ben18785/oxford-apc-finder"
 # University of Oxford ROR ID (https://ror.org/052gg0110)
 institution_ror: "052gg0110"
 institution_name: "University of Oxford"
