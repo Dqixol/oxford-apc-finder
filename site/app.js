@@ -885,12 +885,12 @@ function guidelinesBlock(j) {
   // Offered even when nothing is held: a journal with no limits recorded is
   // exactly where a reader filling them in helps most.
   const editLink = `<div class="gl-edit"><a href="#" class="btn" id="guidelines-edit">${
-    types.length ? "Correct or add" : "Fill in"} word limits for this journal</a></div>`;
+    types.length ? "Correct or add" : "Fill in"} article details for this journal</a></div>`;
   if (!types.length) {
     return `
     <div class="detail-section">
       <h4>Accepted Article Types</h4>
-      <p class="cost-note">No word limits are held for this journal.</p>
+      <p class="cost-note">No article details are held for this journal.</p>
       ${editLink}
     </div>`;
   }
@@ -900,7 +900,7 @@ function guidelinesBlock(j) {
     const urls = (t.source_urls || []).filter(Boolean);
     // Only a type with something to reveal gets the toggle; the rest stay
     // plain text rather than a button that opens onto nothing.
-    if (!t.structure && !t.figures_tables && !urls.length) {
+    if (!t.description && !t.structure && !t.figures_tables && !urls.length) {
       return `<tr>
       <th scope="row">${name}${note}</th>
       <td class="num">${wordLimit(t)}</td>
@@ -914,6 +914,7 @@ function guidelinesBlock(j) {
     </tr>
     <tr class="type-detail" id="${detailId}" hidden>
       <td colspan="2"><div class="type-bubble"><dl>
+        ${t.description ? `<dt>Description</dt><dd>${esc(t.description)}</dd>` : ""}
         ${t.structure ? `<dt>Structure</dt><dd>${esc(t.structure)}</dd>` : ""}
         ${t.figures_tables ? `<dt>Figures and tables</dt><dd>${esc(t.figures_tables)}</dd>` : ""}
         ${urls.length ? `<dt>Source</dt><dd>${urls.map(u =>
@@ -938,7 +939,7 @@ function guidelinesBlock(j) {
     </div>`;
 }
 
-/* A form for a reader to record word limits per article type, and
+/* A form for a reader to record guidelines per article type, and
  * save them to data/guidelines/<id>.json in the same shape the build reads. Fields the form does not
  * cover are carried over from the existing record rather than dropped. */
 function showGuidelinesForm(id, j) {
@@ -973,11 +974,20 @@ function showGuidelinesForm(id, j) {
   };
 
   showModal(`
-    <h2 id="detail-title">Word limits</h2>
+    <h2 id="detail-title">Article type & details</h2>
     <p class="pub">${esc(j.title)}</p>
-    <p class="cost-note">One row per article type, as the journal's own author
-      guidelines state them. Leave a box empty if the journal gives no number.
-      Set min and max to the same number for a single stated limit.</p>
+    <p class="cost-note">Thanks for helping out! These details are often buried
+      deep in a journal's author guidelines, so whatever you can add saves the
+      next person the search. Add a row for each article type the journal takes
+      (Research Article, Review, Letter…). Only the type's name is needed:
+      fill in what you found and leave the rest blank.</p>
+    <ul class="cost-note gl-examples">
+      <li>“Up to 8,000 words”: leave min empty, max 8000</li>
+      <li>“Around 3,500 words”: 3500 in both min and max</li>
+      <li>“300–800 words”: min 300, max 800</li>
+      <li>Structure: “Abstract (≤150 words), Introduction, Results, Discussion, Methods”</li>
+      <li>Figures &amp; tables: “Up to 6 figures or tables in total”</li>
+    </ul>
     <form id="gl-form" class="gl-form">
       <label class="gl-url">Author guidelines page
         <input name="url" type="url" value="${val(g.url || (j.submission || {}).author_instructions_url)}"

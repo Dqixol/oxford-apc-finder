@@ -83,3 +83,7 @@ shown on the page (e.g. `els2026jisc`) makes a report much easier to handle.
 
 Project code is MIT (see `LICENSE`). Building, running and testing the pipeline
 is documented in [DEVELOPMENT.md](DEVELOPMENT.md).
+
+
+PyYAML
+requests

@@ -46,7 +46,7 @@ jobs:
       - name: Label the issue
         run: |
           gh label create guidelines-submission --color 0E8A16 \
-            --description "Word limits submitted from the site" --force
+            --description "Word limits, structure and figures submitted from the site" --force
           gh issue edit "$ISSUE" --add-label guidelines-submission
 
       # The body is untrusted: passed through the environment, never
@@ -64,17 +64,18 @@ jobs:
         with:
           branch: guidelines/issue-${{ github.event.issue.number }}
           add-paths: data/guidelines/*.json
-          commit-message: "Word limits for ${{ steps.build.outputs.id }} (from #${{ github.event.issue.number }})"
-          title: "Word limits: ${{ steps.build.outputs.journal }} (${{ steps.build.outputs.id }})"
+          commit-message: "Community: Guidelines for ${{ steps.build.outputs.id }} (from #${{ github.event.issue.number }})"
+          title: "Community: Guidelines for ${{ steps.build.outputs.journal }} (${{ steps.build.outputs.id }})"
           labels: guidelines-submission
           body: |
             Submitted by @${{ github.event.issue.user.login }} from the site's word-limits form.
 
             Closes #${{ github.event.issue.number }}
 
-            Before merging, check the limits against the journal's own author
-            guidelines. The file is marked `validated: false`; set it to `true`
-            if you have confirmed it.
+            Before merging, check the word limits, structure and figures &
+            tables notes against the journal's own author guidelines. The file
+            is marked `validated: false`; set it to `true` if you have
+            confirmed it.
 
       - name: Link the pull request from the issue
         if: steps.pr.outputs.pull-request-operation == 'created' || steps.pr.outputs.pull-request-operation == 'updated'

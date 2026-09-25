@@ -78,9 +78,9 @@
   "url": "https://docs.google.com/spreadsheets/d/1Kv3MbgFSgtSDnEGkA2JacrSjunRu0umHeZCtcMeqO5E/gviz/tq?tqx=out:csv&sheet=Withdrawn"
  },
  "fx_rates": {
-  "bytes": 436,
-  "retrieved": "2026-09-24T10:33:16Z",
-  "sha256": "57860937ddf1006c79f8dfc397867cef3423936fc34b6335adb145e51ee7b0c8",
+  "bytes": 429,
+  "retrieved": "2026-09-24T17:07:34Z",
+  "sha256": "33745d20e68931cbf1876ce6745f34074f05e437e0ec0ba4165f2121d19d46f0",
   "url": "https://api.frankfurter.dev/v1/latest?base=GBP"
  },
  "jct_index": {
